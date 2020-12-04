@@ -1,0 +1,56 @@
+{
+    "name": "sfcc-sandboxes-manager",
+    "description": "Salesforce B2C Commerce On-Demand Sandboxes Manager",
+    "version": "0.0.1",
+    "author": "Jordane BACHELET",
+    "bugs": "https://github.com/jbachelet/sfcc-sandboxes-manager/issues",
+    "dependencies": {
+        "compression": "^1.7.4",
+        "express": "^4.17.1",
+        "helmet": "^4.2.0"
+    },
+    "devDependencies": {
+        "eslint": "^7.15.0",
+        "husky": "^4.3.4",
+        "lint-staged": "^10.5.3",
+        "lwc-services": "^2.3.0",
+        "prettier": "^2.2.1"
+    },
+    "engines": {
+        "node": ">=10.13.0",
+        "npm": ">=6.4.1",
+        "yarn": ">=1.9.4"
+    },
+    "homepage": "https://github.com/jbachelet/sfcc-sandboxes-manager",
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "keywords": [
+        "lwc"
+    ],
+    "license": "MIT",
+    "lint-staged": {
+        "**/*.{css,html,js,json,md,ts,yaml,yml}": [
+            "prettier --write"
+        ],
+        "./src/**/*.js": [
+            "eslint"
+        ]
+    },
+    "repository": "jbachelet/sfcc-sandboxes-manager",
+    "scripts": {
+        "build": "lwc-services build -m production -w webpack.config.js",
+        "build:development": "lwc-services build -w webpack.config.js",
+        "lint": "eslint ./src/**/*.js",
+        "prettier": "prettier --write \"**/*.{css,html,js,json,md,ts,yaml,yml}\"",
+        "prettier:verify": "prettier --list-different \"**/*.{css,html,js,json,md,ts,yaml,yml}\"",
+        "serve": "node src/server/server.js",
+        "test:unit": "lwc-services test:unit",
+        "test:unit:coverage": "lwc-services test:unit --coverage",
+        "test:unit:debug": "lwc-services test:unit --debug",
+        "test:unit:watch": "lwc-services test:unit --watch",
+        "watch": "lwc-services watch"
+    }
+}
