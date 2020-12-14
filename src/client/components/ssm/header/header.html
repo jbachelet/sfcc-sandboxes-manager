@@ -1,0 +1,147 @@
+<template>
+    <header class="slds-global-header_container">
+        <div class="slds-global-header slds-grid slds-grid_align-spread">
+            <div class="slds-global-header__item">
+                <img
+                    src="/resources/slds/images/logo-noname.svg"
+                    style="height: 2em"
+                />
+            </div>
+            <div class="slds-global-header__item">
+                <ul class="slds-global-actions">
+                    <li class="slds-global-actions__item">
+                        <div
+                            class="slds-dropdown-trigger slds-dropdown-trigger_click"
+                        >
+                            <button
+                                class="slds-button slds-button_icon slds-button_icon slds-button_icon-container slds-button_icon-small slds-global-actions__task slds-global-actions__item-action"
+                                aria-haspopup="true"
+                                title="Global Actions"
+                            >
+                                <svg
+                                    class="slds-button__icon"
+                                    aria-hidden="true"
+                                >
+                                    <use
+                                        xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#add"
+                                    ></use>
+                                </svg>
+                                <span class="slds-assistive-text"
+                                    >Global Actions</span
+                                >
+                            </button>
+                        </div>
+                    </li>
+                    <li
+                        class="slds-global-actions__item slds-m-horizontal_small"
+                    >
+                        <div
+                            class="slds-dropdown-trigger slds-dropdown-trigger_click"
+                        >
+                            <a
+                                href="https://documentation.b2c.commercecloud.salesforce.com/DOC1/topic/com.demandware.dochelp/content/b2c_commerce/topics/sandboxes/b2c_developer_sandboxes.html"
+                                class="slds-button slds-button_icon slds-button_icon slds-button_icon-container slds-button_icon-small slds-global-actions__help slds-global-actions__item-action"
+                                aria-haspopup="true"
+                                title="Documentation"
+                                target="_blank"
+                            >
+                                <svg
+                                    class="slds-button__icon slds-global-header__icon"
+                                    aria-hidden="true"
+                                >
+                                    <use
+                                        xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#question"
+                                    ></use>
+                                </svg>
+                                <span class="slds-assistive-text"
+                                    >Documentation</span
+                                >
+                            </a>
+                        </div>
+                    </li>
+                    <li class="slds-hide" data-js-not-authenticated>
+                        <button
+                            class="slds-button slds-button_icon slds-button_icon-border-filled"
+                            title="Authenticate"
+                            onclick={onClickNotAuthenticatedLink}
+                        >
+                            <svg class="slds-button__icon" aria-hidden="true">
+                                <use
+                                    xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#lock"
+                                ></use>
+                            </svg>
+                            <span class="slds-assistive-text"
+                                >Authenticate</span
+                            >
+                        </button>
+                    </li>
+                    <li class="slds-hide" data-js-authenticated>
+                        <div
+                            class="slds-dropdown-trigger slds-dropdown-trigger_click"
+                        >
+                            <button
+                                class="slds-button slds-button_icon slds-button_icon-brand slds-button_icon-container-more"
+                                aria-haspopup="true"
+                                title="Authenticate"
+                                onclick={onClickAuthenticatedLink}
+                            >
+                                <svg
+                                    class="slds-button__icon"
+                                    aria-hidden="true"
+                                >
+                                    <use
+                                        xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#unlock"
+                                    ></use>
+                                </svg>
+                                <svg
+                                    class="slds-button__icon slds-button__icon_x-small"
+                                    aria-hidden="true"
+                                >
+                                    <use
+                                        xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#down"
+                                    ></use>
+                                </svg>
+                                <span class="slds-assistive-text"
+                                    >Authenticated</span
+                                >
+                            </button>
+                            <div class="slds-dropdown slds-dropdown_right">
+                                <ul
+                                    class="slds-dropdown__list"
+                                    role="menu"
+                                    aria-label="Show More"
+                                >
+                                    <li
+                                        class="slds-dropdown__item"
+                                        role="presentation"
+                                    >
+                                        <a
+                                            role="menuitem"
+                                            tabindex="0"
+                                            onclick={onClickLogoutLink}
+                                        >
+                                            <span
+                                                class="slds-truncate"
+                                                title="Logout"
+                                            >
+                                                <svg
+                                                    class="slds-icon slds-icon_x-small slds-icon-text-default slds-m-right_x-small"
+                                                    aria-hidden="true"
+                                                >
+                                                    <use
+                                                        xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#logout"
+                                                    ></use>
+                                                </svg>
+                                                Logout
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+</template>

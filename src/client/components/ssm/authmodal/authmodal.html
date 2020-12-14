@@ -1,0 +1,95 @@
+<template>
+    <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="auth-modal-header"
+        aria-modal="true"
+        aria-describedby="auth-modal-content"
+        class="slds-modal"
+        data-js-modal
+    >
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <button
+                    class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                    title="Close"
+                    onclick={handleClose}
+                >
+                    <svg
+                        class="slds-button__icon slds-button__icon_large"
+                        aria-hidden="true"
+                    >
+                        <use
+                            xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#close"
+                        ></use>
+                    </svg>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2
+                    id="auth-modal-header"
+                    class="slds-modal__title slds-hyphenate"
+                >
+                    Authentication
+                </h2>
+                <p class="slds-m-top_x-small">
+                    Please authenticate in order to use this tool.
+                </p>
+            </header>
+            <div
+                class="slds-modal__content slds-p-around_medium"
+                id="auth-modal-content"
+            >
+                <p>
+                    Please provide your <strong>client_id</strong> in order to
+                    auhtenticate through the Account Manager.
+                </p>
+                <p>
+                    Account manager URL:
+                    <strong>{authDetails.accountManagerURL}</strong>
+                </p>
+                <p>Flow: <strong>{authDetails.grant}</strong></p>
+                <div class="slds-form-element">
+                    <label
+                        class="slds-form-element__label"
+                        for="auth-client-id"
+                    >
+                        <abbr class="slds-required" title="required">* </abbr>
+                        Client Id
+                    </label>
+                    <div class="slds-form-element__control">
+                        <input
+                            type="text"
+                            id="auth-client-id"
+                            placeholder="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                            required="required"
+                            class="slds-input"
+                            data-js-client-id
+                        />
+                    </div>
+                </div>
+                <p class="slds-m-top_large">
+                    <em
+                        >This tool is developed by the community, for the
+                        community. This tool is not an official Salesforce tool
+                        nor an official Salesforce product.</em
+                    >
+                </p>
+            </div>
+            <footer class="slds-modal__footer">
+                <button
+                    class="slds-button slds-button_neutral"
+                    onclick={handleClose}
+                >
+                    Cancel
+                </button>
+                <button
+                    class="slds-button slds-button_brand"
+                    onclick={handleLogin}
+                >
+                    Login
+                </button>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop" data-js-background></div>
+</template>

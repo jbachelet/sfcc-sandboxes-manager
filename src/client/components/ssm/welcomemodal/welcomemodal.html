@@ -1,0 +1,95 @@
+<template>
+    <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="welcome-modal-header"
+        class="slds-modal slds-modal_small"
+        aria-describedby="welcome-modal-content"
+        aria-modal="true"
+        data-js-modal
+    >
+        <div class="slds-modal__container">
+            <header class="slds-modal__header slds-modal__header_empty">
+                <button
+                    class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                    title="Close"
+                    onclick={handleClose}
+                >
+                    <svg
+                        class="slds-button__icon slds-button__icon_large"
+                        aria-hidden="true"
+                    >
+                        <use
+                            xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"
+                        ></use>
+                    </svg>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+            </header>
+            <div class="slds-modal__content" id="welcome-modal-content">
+                <div class="slds-welcome-mat slds-welcome-mat_splash">
+                    <div class="slds-welcome-mat__content slds-grid">
+                        <div class="slds-welcome-mat__info slds-size_1-of-1">
+                            <div class="slds-welcome-mat__info-content">
+                                <h2
+                                    class="slds-welcome-mat__info-title"
+                                    id="welcome-modal-header"
+                                >
+                                    The SFCC On-Demand Sandboxes Manager is
+                                    here!
+                                </h2>
+                                <div
+                                    class="slds-welcome-mat__info-description slds-text-longform"
+                                >
+                                    <p>
+                                        Welcome to SFCC On-Demand Sandboxes
+                                        Manager. This interface allows you to
+                                        manage the On-Demand Sandboxes within
+                                        the realms you have access to.
+                                    </p>
+                                </div>
+                                <div class="slds-welcome-mat__info-actions">
+                                    <button
+                                        class="slds-button slds-button_brand"
+                                        onclick={handleClose}
+                                    >
+                                        Got it!
+                                    </button>
+                                    <div class="slds-m-top_large">
+                                        <div class="slds-form-element">
+                                            <div
+                                                class="slds-form-element__control"
+                                            >
+                                                <div class="slds-checkbox">
+                                                    <input
+                                                        type="checkbox"
+                                                        id="dont-show-again"
+                                                        data-js-dont-show-again
+                                                    />
+                                                    <label
+                                                        class="slds-checkbox__label"
+                                                        for="dont-show-again"
+                                                    >
+                                                        <span
+                                                            class="slds-checkbox_faux"
+                                                        ></span>
+                                                        <span
+                                                            class="slds-form-element__label"
+                                                            >Don&#x27;t show
+                                                            this again</span
+                                                        >
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop" data-js-background></div>
+</template>
