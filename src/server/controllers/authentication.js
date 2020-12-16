@@ -8,8 +8,9 @@ const ACCOUNT_MANAGER_AUTH_PATH = '/dwsso/oauth2/authorize';
 const ACCOUNT_MANAGER_URL = `https://${ACCOUNT_MANAGER_HOST}${ACCOUNT_MANAGER_AUTH_PATH}`;
 const OAUTH_REDIRECT_PATH = '/auth/login_reentry';
 const OAUTH_REDIRECT_URL = `https://${
-    process.env.OAUTH_REDIRECT_HOST || process.env.HOST || 'localhost'
-}:${process.env.PORT || 3001}${OAUTH_REDIRECT_PATH}`;
+    (process.env.OAUTH_REDIRECT_HOST || process.env.HOST) &&
+    (process.env.PORT || 3001)
+}${OAUTH_REDIRECT_PATH}`;
 const GRANTS = {
     IMPLICIT: {
         grant: 'implicit',
@@ -25,7 +26,7 @@ const GRANTS = {
 const NOT_AUTHENTICATED_RESPONSE = {
     authenticated: false,
     accountManagerURL: ACCOUNT_MANAGER_URL,
-    // https://account.demandware.com/dwsso/oauth2/authorize?client_id=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&redirect_uri=https://sfcc-sandboxes-manager.herokuapp.com:80/auth/login_reentry&response_type=token
+    // https://account.demandware.com/dwsso/oauth2/authorize?client_id=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&redirect_uri=https://sfcc-sandboxes-manager.herokuapp.com/auth/login_reentry&response_type=token
     authenticationURL: `${ACCOUNT_MANAGER_URL}?client_id={0}&redirect_uri=${GRANTS.IMPLICIT.redirect_uri}&response_type=token`,
     grant: GRANTS.IMPLICIT.grant
 };
