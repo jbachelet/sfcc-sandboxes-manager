@@ -31,23 +31,16 @@
                 >
                     Authentication
                 </h2>
-                <p class="slds-m-top_x-small">
-                    Please authenticate in order to use this tool.
-                </p>
             </header>
             <div
                 class="slds-modal__content slds-p-around_medium"
                 id="auth-modal-content"
             >
                 <p>
-                    Please provide your <strong>client_id</strong> in order to
-                    auhtenticate through the Account Manager.
+                    Please provide your <strong>client_id</strong> and
+                    <strong>client_secret</strong> in order to auhtenticate
+                    through the Account Manager.
                 </p>
-                <p>
-                    Account manager URL:
-                    <strong>{authDetails.accountManagerURL}</strong>
-                </p>
-                <p>Flow: <strong>{authDetails.grant}</strong></p>
                 <div class="slds-form-element">
                     <label
                         class="slds-form-element__label"
@@ -64,6 +57,28 @@
                             required="required"
                             class="slds-input"
                             data-js-client-id
+                            value="26f27eee-1e98-44ba-b6a8-a4570e885958"
+                        />
+                    </div>
+                </div>
+
+                <div class="slds-form-element">
+                    <label
+                        class="slds-form-element__label"
+                        for="auth-client-secret"
+                    >
+                        <abbr class="slds-required" title="required">* </abbr>
+                        Client Secret
+                    </label>
+                    <div class="slds-form-element__control">
+                        <input
+                            type="text"
+                            id="auth-client-secret"
+                            placeholder="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                            required="required"
+                            class="slds-input"
+                            data-js-client-secret
+                            value="g9&498&75MbnQtFx#BsE"
                         />
                     </div>
                 </div>

@@ -68,14 +68,14 @@
             </div>
         </div>
 
-        <script nomodule>
+        <script nomodule nonce="{nonce}">
             const { outdated } = window;
             outdated.style.display = 'unset';
             outdated.querySelector('.unsupported_message').textContent =
                 'This application requires a more recent version of your browser';
         </script>
 
-        <script>
+        <script nonce="{nonce}">
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
                     navigator.serviceWorker.register('/sw.js');

@@ -32,7 +32,10 @@ export default class WelcomeModal extends LightningElement {
             return;
         }
 
-        this.toggleModal(true);
+        const urlParams = new URLSearchParams(window.location.search);
+        if (!urlParams.get('authenticated')) {
+            this.toggleModal(true);
+        }
     }
 
     handleClose(e) {

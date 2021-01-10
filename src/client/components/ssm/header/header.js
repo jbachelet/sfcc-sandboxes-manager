@@ -50,18 +50,7 @@ export default class Header extends LightningElement {
 
     onClickLogoutLink(e) {
         e.preventDefault();
-        logout().then((result) => {
-            const eventDetails = Object.assign(
-                {},
-                {
-                    bubbles: true,
-                    detail: result
-                }
-            );
-
-            this.dispatchEvent(new CustomEvent('userlogout', eventDetails));
-            this.refreshView(result.authenticated);
-        });
+        logout().then((result) => this.refreshView(result.authenticated));
     }
 
     @api

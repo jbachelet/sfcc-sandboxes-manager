@@ -1,17 +1,20 @@
-import { LightningElement, api, track } from 'lwc';
-
+import { LightningElement, api } from 'lwc';
+import { getOAuth } from 'data/authService';
 export default class AuthModal extends LightningElement {
     selectors = {
         modal: '[data-js-modal]',
         background: '[data-js-background]',
-        clientIdInput: '[data-js-client-id]'
+        clientIdInput: '[data-js-client-id]',
+        clientSecretInput: '[data-js-client-secret]',
+        inputCtnr: '.slds-form-element'
     };
     classes = {
         modalOpen: 'slds-fade-in-open',
-        backgroundOpen: 'slds-backdrop_open'
+        backgroundOpen: 'slds-backdrop_open',
+        error: 'slds-has-error',
+        hide: 'slds-hide'
     };
     cache = {};
-    @track _authDetails;
 
     renderedCallback() {
         this.cache.modal = this.template.querySelector(this.selectors.modal);
@@ -21,6 +24,9 @@ export default class AuthModal extends LightningElement {
         this.cache.clientIdInput = this.template.querySelector(
             this.selectors.clientIdInput
         );
+        this.cache.clientSecretInput = this.template.querySelector(
+            this.selectors.clientSecretInput
+        );
     }
 
     handleClose(e) {
@@ -28,21 +34,50 @@ export default class AuthModal extends LightningElement {
         this.toggleModal(false);
     }
 
-    handleLogin(e) {
+    async handleLogin(e) {
         e.preventDefault();
-        const url = this.authDetails.authenticationURL.replace(
-            '{0}',
-            this.cache.clientIdInput.value
-        );
-        const tab = window.open(url, '_blank');
-        if (tab) {
-            tab.focus();
-        }
-    }
 
-    @api
-    applyAuthDetails(authDetails) {
-        this._authDetails = authDetails;
+        let isError = false;
+        this.cache.clientIdInput
+            .closest(this.selectors.inputCtnr)
+            .classList.remove(this.classes.error);
+        this.cache.clientSecretInput
+            .closest(this.selectors.inputCtnr)
+            .classList.remove(this.classes.error);
+
+        if (
+            this.cache.clientIdInput.value === undefined ||
+            this.cache.clientIdInput.value.length === 0
+        ) {
+            isError = true;
+            this.cache.clientIdInput
+                .closest(this.selectors.inputCtnr)
+                .classList.add(this.classes.error);
+        }
+
+        if (
+            this.cache.clientSecretInput.value === undefined ||
+            this.cache.clientSecretInput.value.length === 0
+        ) {
+            isError = true;
+            this.cache.clientSecretInput
+                .closest(this.selectors.inputCtnr)
+                .classList.remove(this.classes.error);
+        }
+
+        if (isError) {
+            return;
+        }
+
+        getOAuth(
+            this.cache.clientIdInput.value,
+            this.cache.clientSecretInput.value
+        ).then((oAuthURL) => {
+            const tab = window.open(oAuthURL, '_blank');
+            if (tab) {
+                tab.focus();
+            }
+        });
     }
 
     @api
@@ -55,14 +90,5 @@ export default class AuthModal extends LightningElement {
 
         this.cache.modal.classList.remove(this.classes.modalOpen);
         this.cache.background.classList.remove(this.classes.backgroundOpen);
-    }
-
-    @api
-    get authDetails() {
-        return this._authDetails
-            ? this._authDetails
-            : {
-                  grant: {}
-              };
     }
 }
