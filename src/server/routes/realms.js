@@ -5,9 +5,8 @@ const router = express.Router();
 
 const realmsController = require('../controllers/realms');
 
+router.get('/', realmsController.list);
 router.get('/{realmId}', realmsController.get);
-router.get('/{realmId}/configuration', realmsController.getConfiguration);
-router.patch('/{realmId}/configuration', realmsController.updateConfiguration);
-router.get('/{realmId}/usage', realmsController.getUsage);
+router.patch('/{realmId}', realmsController.update);
 
 module.exports = router;

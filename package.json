@@ -16,8 +16,7 @@
         "lwc-webpack-plugin": "^0.3.0",
         "redis": "^3.0.2",
         "@salesforce-ux/design-system": "2.13.7",
-        "@lwc/synthetic-shadow": "^1.8.7",
-        "sfcc-ci": "git://github.com/jordanebachelet/sfcc-ci.git#64291544bdf9bd4709f9e4c6eefcce561241d5ac"
+        "@lwc/synthetic-shadow": "^1.8.7"
     },
     "devDependencies": {
         "compression": "^1.7.4",

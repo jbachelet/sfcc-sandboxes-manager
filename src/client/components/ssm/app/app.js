@@ -9,13 +9,32 @@ export default class App extends LightningElement {
     renderedCallback() {
         getDetails().then((result) => {
             this.authDetails = result;
-            this.template
-                .querySelector('ssm-header')
-                .refreshView(result && result.authenticated);
+            this.refreshSubComponents();
         });
     }
 
     handleOpenAuthModal() {
         this.template.querySelector('ssm-authmodal').toggleModal(true);
+    }
+
+    handleLogout(e) {
+        this.authDetails = e.detail;
+        this.refreshSubComponents();
+    }
+
+    refreshSubComponents() {
+        // Refresh the header
+        this.template
+            .querySelector('ssm-header')
+            .refreshView(this.authDetails.authenticated);
+        // Render or not the auth modal automatically
+        this.template
+            .querySelector('ssm-authmodal')
+            .toggleModal(!this.authDetails.authenticated);
+
+        // Display authenticated components
+        this.template
+            .querySelector('ssm-sandboxes')
+            .refreshView(this.authDetails.authenticated);
     }
 }

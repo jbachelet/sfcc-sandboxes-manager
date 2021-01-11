@@ -1,0 +1,93 @@
+<template>
+    <td role="gridcell">
+        <div class="slds-truncate" title={sandbox.id}>{sandbox.id}</div>
+    </td>
+    <td role="gridcell">
+        <div class="slds-truncate" title={sandbox.realm}>{sandbox.realm}</div>
+    </td>
+    <td role="gridcell">
+        <div class="slds-truncate" title={sandbox.instance}>
+            {sandbox.instance}
+        </div>
+    </td>
+    <td role="gridcell">
+        <div class="slds-truncate" title={createdAt}>{createdAt}</div>
+    </td>
+    <td role="gridcell">
+        <div class="slds-truncate" title={sandbox.createdBy}>
+            {sandbox.createdBy}
+        </div>
+    </td>
+    <td role="gridcell">
+        <div class="slds-truncate" title={sandbox.state}>
+            <span class={badgeState}>{sandbox.state}</span>
+        </div>
+    </td>
+    <td role="gridcell">
+        <div class="slds-truncate" title="Actions">
+            <a
+                href={url}
+                target="_blank"
+                class="slds-button slds-button_icon slds-button_icon-border-filled slds-button_icon-small"
+                title="Open"
+            >
+                <svg class="slds-button__icon" aria-hidden="true">
+                    <use
+                        xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#open"
+                    ></use>
+                </svg>
+                <span class="slds-assistive-text">Open</span>
+            </a>
+            <template if:true={canStart}>
+                <button
+                    class="slds-button slds-button_icon slds-button_icon-border-filled slds-button_icon-small"
+                    title="Start"
+                >
+                    <svg class="slds-button__icon" aria-hidden="true">
+                        <use
+                            xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#play"
+                        ></use>
+                    </svg>
+                    <span class="slds-assistive-text">Start</span>
+                </button>
+            </template>
+            <template if:true={canStop}>
+                <button
+                    class="slds-button slds-button_icon slds-button_icon-border-filled slds-button_icon-small"
+                    title="Stop"
+                >
+                    <svg class="slds-button__icon" aria-hidden="true">
+                        <use
+                            xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#stop"
+                        ></use>
+                    </svg>
+                    <span class="slds-assistive-text">Stop</span>
+                </button>
+            </template>
+            <button
+                class="slds-button slds-button_icon slds-button_icon-border-filled slds-button_icon-small"
+                title="Details"
+            >
+                <svg class="slds-button__icon" aria-hidden="true">
+                    <use
+                        xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#threedots"
+                    ></use>
+                </svg>
+                <span class="slds-assistive-text">Details</span>
+            </button>
+            <template if:true={canDelete}>
+                <button
+                    class="slds-button slds-button_icon slds-button_icon-error slds-button_icon-border-filled slds-button_icon-small"
+                    title="Delete"
+                >
+                    <svg class="slds-button__icon" aria-hidden="true">
+                        <use
+                            xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#delete"
+                        ></use>
+                    </svg>
+                    <span class="slds-assistive-text">Delete</span>
+                </button>
+            </template>
+        </div>
+    </td>
+</template>

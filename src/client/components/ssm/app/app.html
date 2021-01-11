@@ -1,6 +1,18 @@
 <template>
-    <ssm-header onopenauthmodal={handleOpenAuthModal}></ssm-header>
+    <ssm-header
+        onopenauthmodal={handleOpenAuthModal}
+        onlogout={handleLogout}
+    ></ssm-header>
 
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col">
+            <!-- Sandboxes list component -->
+            <ssm-sandboxes></ssm-sandboxes>
+        </div>
+    </div>
+
+    <!-- Auth modal -->
     <ssm-authmodal></ssm-authmodal>
+    <!-- Welcome modal -->
     <ssm-welcomemodal></ssm-welcomemodal>
 </template>

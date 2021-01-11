@@ -1,5 +1,7 @@
 'use strict';
 
+import { get, post } from 'data/apiService';
+
 const URLS = {
     getDetails: '/auth/details',
     getOAuth: '/auth/get_oauth',
@@ -7,40 +9,19 @@ const URLS = {
 };
 
 export const getDetails = async () => {
-    const response = await fetch(URLS.getDetails);
-    const json = await response.json();
-    if (!response.ok || response.error === true) {
-        console.log(`Error: ${response.status} - ${json}`);
-    }
-
-    return json;
+    const response = await get(URLS.getDetails);
+    return response;
 };
 
 export const logout = async () => {
-    const response = await fetch(URLS.logout);
-    const json = await response.json();
-    if (!response.ok || response.error === true) {
-        console.log(`Error: ${response.status} - ${json}`);
-    }
-
-    return json;
+    const response = await post(URLS.logout);
+    return response;
 };
 
 export const getOAuth = async (clientId, clientSecret) => {
-    const response = await fetch(URLS.getOAuth, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            client_id: clientId,
-            client_secret: clientSecret
-        })
+    const response = await post(URLS.getOAuth, {
+        client_id: clientId,
+        client_secret: clientSecret
     });
-    const json = await response.json();
-    if (!response.ok || response.error === true) {
-        console.log(`Error: ${response.status} - ${json}`);
-    }
-
-    return json.oauthURL;
+    return response.oauthURL;
 };

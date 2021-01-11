@@ -1,4 +1,4 @@
-import { LightningElement, api } from 'lwc';
+import { LightningElement, api, track } from 'lwc';
 import { logout } from 'data/authService';
 
 export default class Header extends LightningElement {
@@ -12,6 +12,7 @@ export default class Header extends LightningElement {
         dropdownOpen: 'slds-is-open'
     };
     cache = {};
+    @track authenticated = false;
 
     renderedCallback() {
         this.cache.notAuthenticatedLink = this.template.querySelector(
@@ -50,12 +51,25 @@ export default class Header extends LightningElement {
 
     onClickLogoutLink(e) {
         e.preventDefault();
-        logout().then((result) => this.refreshView(result.authenticated));
+        logout().then((result) => {
+            this.authenticated = result.authenticated;
+            this.refreshView(this.authenticated);
+            this.dispatchEvent(
+                new CustomEvent('logout', {
+                    bubbles: true,
+                    detail: {
+                        authenticated: this.authenticated
+                    }
+                })
+            );
+        });
     }
 
     @api
     refreshView(isAuthenticated) {
-        if (isAuthenticated) {
+        this.authenticated = isAuthenticated;
+
+        if (this.authenticated) {
             this.cache.notAuthenticatedLink.classList.add(this.classes.hide);
             this.cache.authenticatedLink.classList.remove(this.classes.hide);
             return;
