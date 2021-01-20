@@ -14,9 +14,7 @@
         <div class="slds-truncate" title={createdAt}>{createdAt}</div>
     </td>
     <td role="gridcell">
-        <div class="slds-truncate" title={sandbox.createdBy}>
-            {sandbox.createdBy}
-        </div>
+        <div title={sandbox.createdBy}>{sandbox.createdBy}</div>
     </td>
     <td role="gridcell">
         <div class="slds-truncate" title={sandbox.state}>
@@ -24,7 +22,21 @@
         </div>
     </td>
     <td role="gridcell">
-        <div class="slds-truncate" title="Actions">
+        <div title="Actions">
+            <template if:true={hasPendingOperation}>
+                <div
+                    class="slds-icon-eq slds-is-animated slds-m-right_xx-small"
+                    title="Operation in progress"
+                >
+                    <div class="slds-icon-eq__bar"></div>
+                    <div class="slds-icon-eq__bar"></div>
+                    <div class="slds-icon-eq__bar"></div>
+                    <span class="slds-assistive-text"
+                        >Operation in progress</span
+                    >
+                </div>
+            </template>
+
             <a
                 href={url}
                 target="_blank"
@@ -38,10 +50,13 @@
                 </svg>
                 <span class="slds-assistive-text">Open</span>
             </a>
+
             <template if:true={canStart}>
                 <button
                     class="slds-button slds-button_icon slds-button_icon-border-filled slds-button_icon-small"
                     title="Start"
+                    data-operation="start"
+                    onclick={handleRunOperation}
                 >
                     <svg class="slds-button__icon" aria-hidden="true">
                         <use
@@ -55,6 +70,8 @@
                 <button
                     class="slds-button slds-button_icon slds-button_icon-border-filled slds-button_icon-small"
                     title="Stop"
+                    data-operation="stop"
+                    onclick={handleRunOperation}
                 >
                     <svg class="slds-button__icon" aria-hidden="true">
                         <use
@@ -67,6 +84,7 @@
             <button
                 class="slds-button slds-button_icon slds-button_icon-border-filled slds-button_icon-small"
                 title="Details"
+                onclick={handleOpenPanel}
             >
                 <svg class="slds-button__icon" aria-hidden="true">
                     <use
@@ -79,6 +97,7 @@
                 <button
                     class="slds-button slds-button_icon slds-button_icon-error slds-button_icon-border-filled slds-button_icon-small"
                     title="Delete"
+                    onclick={handleDelete}
                 >
                     <svg class="slds-button__icon" aria-hidden="true">
                         <use

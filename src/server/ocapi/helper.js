@@ -143,7 +143,7 @@ module.exports.sortRecords = (list, sortby) => {
  * @param {String} method HTTP request method to use on `url`
  * @param {String} url full URL to call
  */
-module.exports.call = async (req, method, url, data) => {
+module.exports.call = async (req, method, url, data, nbRetry = 0) => {
     const accessToken = module.exports.getAccessToken(req);
     const options = module.exports.getOptions(method, url, undefined, true, {
         bearer: accessToken
@@ -172,6 +172,10 @@ module.exports.call = async (req, method, url, data) => {
             console.log('Error', err.message);
         }
 
+        if (nbRetry > 0) {
+            return undefined;
+        }
+
         // If failing, retry just one time thanks to the refresh token, if any
         const refreshToken = module.exports.getRefreshToken(req);
         if (!refreshToken) {
@@ -186,7 +190,7 @@ module.exports.call = async (req, method, url, data) => {
             { grant_type: 'refresh_token', refresh_token: refreshToken }
         );
         if (authResponse) {
-            return module.exports.call(req, method, url, data);
+            return module.exports.call(req, method, url, data, 1);
         }
 
         return undefined;

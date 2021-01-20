@@ -34,7 +34,7 @@ export default class App extends LightningElement {
 
         // Display authenticated components
         this.template
-            .querySelector('ssm-sandboxes')
+            .querySelector('ssm-realms')
             .refreshView(this.authDetails.authenticated);
     }
 }

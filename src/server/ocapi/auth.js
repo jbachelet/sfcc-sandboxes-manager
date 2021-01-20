@@ -49,8 +49,6 @@ module.exports.obtainToken = async (
         options.data = querystring.stringify(grantPayload);
     }
 
-    console.log(options);
-
     try {
         const response = await axios(options);
         if (!response.statusText === 'OK' || response.status !== 200) {

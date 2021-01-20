@@ -1,3 +1,7 @@
 :host {
     display: table-row;
 }
+
+.slds-icon-eq {
+    display: inline-block;
+}

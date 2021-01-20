@@ -1,0 +1,32 @@
+<template>
+    <li
+        class={htmlClass}
+        title={realm.id}
+        role="presentation"
+        data-row-index={index}
+    >
+        <a
+            class="slds-vertical-tabs__link"
+            role="tab"
+            tabindex="0"
+            aria-selected="true"
+            aria-controls={controlid}
+            id={navid}
+            onclick={handleClick}
+        >
+            <span class="slds-vertical-tabs__left-icon">
+                <span
+                    class="slds-icon_container slds-icon-standard-action-list-component"
+                >
+                    <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                        <use
+                            xlink:href="/resources/slds/icons/standard-sprite/svg/symbols.svg#action_list_component"
+                        ></use>
+                    </svg>
+                </span>
+            </span>
+            <span class="slds-truncate" title={realm.id}>{realm.id}</span>
+            <span class="slds-vertical-tabs__right-icon"></span>
+        </a>
+    </li>
+</template>

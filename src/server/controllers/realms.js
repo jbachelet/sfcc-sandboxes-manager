@@ -20,7 +20,7 @@ async function getRealm(req, realmId, extension) {
         'get',
         `${config.ocapi.SANDBOXES_ENDPOINTS.API_BASE}/realms/${realmId}${extension}`
     );
-    return result?.data;
+    return result.data;
 }
 
 exports.list = async (req, res) => {
@@ -29,17 +29,21 @@ exports.list = async (req, res) => {
         'get',
         config.ocapi.SANDBOXES_ENDPOINTS.API_BASE + '/me'
     );
-    const sortBy = req.body?.sortBy;
+    const sortBy = req.query.sortBy;
 
-    if (result.data?.realms) {
+    if (result.data.realms) {
+        let realms = result.data.realms;
+        realms = realms.map((realm) => ({
+            id: realm
+        }));
+
         if (sortBy) {
-            res.json(ocapi.sortRecords(result.data.realms, sortBy));
-            return;
+            realms = ocapi.sortRecords(realms, sortBy);
         }
 
         res.json({
             error: false,
-            data: result.data.realms
+            data: realms
         });
         return;
     }
@@ -51,10 +55,10 @@ exports.list = async (req, res) => {
 };
 
 exports.get = async (req, res) => {
-    const realmId = req.body?.realmId;
-    const topic = req.body?.topic;
-    const from = req.body?.from || '';
-    const to = req.body?.to || '';
+    const realmId = req.query.realmId;
+    const topic = req.query.topic;
+    const from = req.query.from || '';
+    const to = req.query.to || '';
 
     if (!realmId) {
         res.json({
@@ -80,9 +84,9 @@ exports.get = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-    const realmId = req.body?.realmId;
-    const maxSandboxTTL = req.body?.maxSandboxTTL;
-    const defaultSandboxTTL = req.body?.defaultSandboxTTL;
+    const realmId = req.body.realmId;
+    const maxSandboxTTL = req.body.maxSandboxTTL;
+    const defaultSandboxTTL = req.body.defaultSandboxTTL;
     const realm = getRealm(req, realmId, '');
 
     if (!realm) {
