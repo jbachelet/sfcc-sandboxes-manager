@@ -26,13 +26,14 @@ export default class Header extends LightningElement {
         );
     }
 
+    onClickOpenWelcomeModal(e) {
+        e.preventDefault();
+        this.dispatchEvent(new CustomEvent('openwelcomemodal'));
+    }
+
     onClickNotAuthenticatedLink(e) {
         e.preventDefault();
-        this.dispatchEvent(
-            new CustomEvent('openauthmodal', {
-                bubbles: true
-            })
-        );
+        this.dispatchEvent(new CustomEvent('openauthmodal'));
     }
 
     onClickAuthenticatedLink(e) {
@@ -56,7 +57,6 @@ export default class Header extends LightningElement {
             this.refreshView(this.authenticated);
             this.dispatchEvent(
                 new CustomEvent('logout', {
-                    bubbles: true,
                     detail: {
                         authenticated: this.authenticated
                     }

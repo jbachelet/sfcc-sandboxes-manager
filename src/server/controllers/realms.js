@@ -29,14 +29,14 @@ exports.list = async (req, res) => {
         'get',
         config.ocapi.SANDBOXES_ENDPOINTS.API_BASE + '/me'
     );
-    const sortBy = req.query.sortBy;
 
-    if (result.data.realms) {
+    if (result?.data?.realms) {
         let realms = result.data.realms;
         realms = realms.map((realm) => ({
             id: realm
         }));
 
+        const sortBy = req.query.sortBy;
         if (sortBy) {
             realms = ocapi.sortRecords(realms, sortBy);
         }

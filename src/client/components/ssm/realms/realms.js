@@ -9,7 +9,6 @@ export default class Realms extends LightningElement {
     };
     cache = {};
     @track realms = [];
-    @track error;
     @track authenticated = false;
     @track loading = false;
 
@@ -53,9 +52,12 @@ export default class Realms extends LightningElement {
         getRealms()
             .then((result) => {
                 if (result.error) {
-                    this.error =
-                        'Error while fetching realms. Please ensure you are authenticated';
-                    this.loading = false;
+                    this.dispatchEvent(
+                        new CustomEvent('refreshauth', {
+                            bubbles: true,
+                            composed: true
+                        })
+                    );
                     return;
                 }
 
@@ -75,10 +77,6 @@ export default class Realms extends LightningElement {
 
     get hasRealms() {
         return this.realms && this.realms.length > 0;
-    }
-
-    get hasError() {
-        return typeof this.error !== 'undefined';
     }
 
     get isAuthenticated() {

@@ -1,4 +1,4 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, api } from 'lwc';
 
 const LOCAL_STORAGE_WELCOME_DONT_SHOW_AGAIN_KEY =
     'sfcc.sandboxes.manager.welcome.dont_show_again';
@@ -51,6 +51,7 @@ export default class WelcomeModal extends LightningElement {
         }
     }
 
+    @api
     toggleModal(isOpened) {
         if (isOpened) {
             this.cache.modal.classList.add(this.classes.modalOpen);

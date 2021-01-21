@@ -1,6 +1,6 @@
 'use strict';
 
-import { get } from 'data/apiService';
+import { httpGet } from 'data/apiService';
 
 const URLS = {
     getRealms: '/realms?sortBy=id',
@@ -8,6 +8,6 @@ const URLS = {
 };
 
 export const getRealms = async () => {
-    const response = await get(URLS.getRealms);
+    const response = await httpGet(URLS.getRealms);
     return response;
 };

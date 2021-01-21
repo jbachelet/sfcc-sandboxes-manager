@@ -70,7 +70,7 @@
                                         State
                                     </div>
                                 </th>
-                                <th scope="col" style="width: 9rem">
+                                <th scope="col" style="width: 10rem">
                                     <div class="slds-truncate" title="Actions">
                                         Actions
                                     </div>
@@ -82,8 +82,10 @@
                                 <ssm-sandbox-row
                                     sandbox={sandbox}
                                     key={sandbox.id}
+                                    onrefreshsandbox={handleRefreshSandbox}
                                     onopensandboxpanel={handleOpenPanel}
                                     onrunoperation={handleRunOperation}
+                                    ondeletesandbox={handleDeleteSandbox}
                                 ></ssm-sandbox-row>
                             </template>
                         </tbody>
@@ -99,18 +101,21 @@
                 </template>
 
                 <template if:false={hasSandboxes}>
-                    <template if:true={hasError}>
-                        <p class="slds-text-color_error">{error}</p>
-                    </template>
-                    <template if:false={hasError}>
-                        <p
-                            class="slds-text-align_center slds-text-title_caps slds-m-vertical_large"
-                        >
-                            No sandboxes yet.
-                        </p>
-                    </template>
+                    <p
+                        class="slds-text-align_center slds-text-title_caps slds-m-vertical_large"
+                    >
+                        No sandboxes yet.
+                    </p>
                 </template>
             </template>
         </div>
     </div>
+
+    <template if:true={showDeletePrompt}>
+        <ssm-deleteprompt
+            sandboxid={sandboxIdToDelete}
+            onconfirmdeletion={handleDeleteSandboxConfirm}
+            onclosedeleteprompt={handleDeleteSandboxCancel}
+        ></ssm-deleteprompt>
+    </template>
 </template>

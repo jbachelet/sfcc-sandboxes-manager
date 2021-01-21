@@ -1,5 +1,6 @@
 <template>
     <ssm-header
+        onopenwelcomemodal={handleOpenWelcomeModal}
         onopenauthmodal={handleOpenAuthModal}
         onlogout={handleLogout}
     ></ssm-header>
@@ -7,7 +8,7 @@
     <div class="slds-grid slds-gutters">
         <div class="slds-col">
             <!-- Realms list component -->
-            <ssm-realms></ssm-realms>
+            <ssm-realms onrefreshauth={handleRefreshAuth}></ssm-realms>
         </div>
     </div>
 

@@ -14,7 +14,7 @@ exports.list = async (req, res) => {
     const sortBy = req.query.sortBy;
     const realmId = req.query.realmId;
 
-    if (result.data) {
+    if (result?.data) {
         let sandboxes = result.data;
         if (sortBy) {
             sandboxes = ocapi.sortRecords(sandboxes, sortBy);
@@ -55,7 +55,7 @@ exports.get = async (req, res) => {
         `${config.ocapi.SANDBOXES_ENDPOINTS.API_SANDBOXES}/${sandboxId}`
     );
 
-    if (result.data) {
+    if (result?.data) {
         if (storage) {
             const storageResult = await ocapi.call(
                 req,
@@ -80,7 +80,32 @@ exports.get = async (req, res) => {
     });
 };
 exports.update = (req, res) => res.send('TODO');
-exports.delete = (req, res) => res.send('TODO');
+exports.delete = async (req, res) => {
+    const sandboxId = req.params.sandboxId;
+    if (!sandboxId) {
+        res.json({
+            error: true
+        });
+        return;
+    }
+
+    const result = await ocapi.call(
+        req,
+        'delete',
+        `${config.ocapi.SANDBOXES_ENDPOINTS.API_SANDBOXES}/${sandboxId}`
+    );
+
+    if (result?.status && result?.status === 'Success') {
+        res.json({
+            error: false
+        });
+        return;
+    }
+
+    res.json({
+        error: true
+    });
+};
 exports.usage = async (req, res) => {
     const sandboxId = req.params.sandboxId;
     const from = req.query.from;
@@ -103,7 +128,7 @@ exports.usage = async (req, res) => {
         `${config.ocapi.SANDBOXES_ENDPOINTS.API_SANDBOXES}/${sandboxId}/usage${queryString}`
     );
 
-    if (result.data) {
+    if (result?.data) {
         res.json({
             error: false,
             data: result.data
@@ -130,7 +155,7 @@ exports.settings = async (req, res) => {
         `${config.ocapi.SANDBOXES_ENDPOINTS.API_SANDBOXES}/${sandboxId}/settings`
     );
 
-    if (result.data) {
+    if (result?.data) {
         res.json({
             error: false,
             data: result.data
@@ -176,7 +201,7 @@ exports.getOperations = async (req, res) => {
         `${config.ocapi.SANDBOXES_ENDPOINTS.API_SANDBOXES}/${sandboxId}/operations${queryString}`
     );
 
-    if (result.data) {
+    if (result?.data) {
         res.json({
             error: false,
             data: result.data
@@ -207,7 +232,7 @@ exports.runOperation = async (req, res) => {
         }
     );
 
-    if (result.data) {
+    if (result?.data) {
         res.json({
             error: false,
             data: result.data

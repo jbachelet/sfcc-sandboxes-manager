@@ -6,7 +6,6 @@ export default class SandboxRow extends LightningElement {
     handleRunOperation(e) {
         this.dispatchEvent(
             new CustomEvent('runoperation', {
-                bubbles: true,
                 detail: {
                     id: this.sandbox.id,
                     operation: e.target.dataset.operation
@@ -15,10 +14,29 @@ export default class SandboxRow extends LightningElement {
         );
     }
 
+    handleRefresh() {
+        this.dispatchEvent(
+            new CustomEvent('refreshsandbox', {
+                detail: {
+                    id: this.sandbox.id
+                }
+            })
+        );
+    }
+
     handleOpenPanel() {
         this.dispatchEvent(
             new CustomEvent('opensandboxpanel', {
-                bubbles: true,
+                detail: {
+                    id: this.sandbox.id
+                }
+            })
+        );
+    }
+
+    handleDelete() {
+        this.dispatchEvent(
+            new CustomEvent('deletesandbox', {
                 detail: {
                     id: this.sandbox.id
                 }
@@ -59,8 +77,19 @@ export default class SandboxRow extends LightningElement {
         }
     }
 
+    get canOpen() {
+        return this.sandbox.state !== 'deleted';
+    }
+
+    get canRefresh() {
+        return !this.hasPendingOperation;
+    }
+
     get canStart() {
-        return !this.hasPendingOperation && this.sandbox.state !== 'started';
+        return (
+            !this.hasPendingOperation &&
+            ['started', 'deleted'].indexOf(this.sandbox.state) === -1
+        );
     }
 
     get canStop() {

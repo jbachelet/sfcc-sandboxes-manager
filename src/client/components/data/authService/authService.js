@@ -1,6 +1,6 @@
 'use strict';
 
-import { get, post } from 'data/apiService';
+import { httpGet, httpPost } from 'data/apiService';
 
 const URLS = {
     getDetails: '/auth/details',
@@ -9,17 +9,17 @@ const URLS = {
 };
 
 export const getDetails = async () => {
-    const response = await get(URLS.getDetails);
+    const response = await httpGet(URLS.getDetails);
     return response;
 };
 
 export const logout = async () => {
-    const response = await post(URLS.logout);
+    const response = await httpPost(URLS.logout);
     return response;
 };
 
 export const getOAuth = async (clientId, clientSecret) => {
-    const response = await post(URLS.getOAuth, {
+    const response = await httpPost(URLS.getOAuth, {
         client_id: clientId,
         client_secret: clientSecret
     });

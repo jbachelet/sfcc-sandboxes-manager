@@ -14,7 +14,6 @@ export default class RealmRow extends LightningElement {
         e.preventDefault();
         this.dispatchEvent(
             new CustomEvent('selectrealm', {
-                bubbles: true,
                 detail: {
                     index: this.index
                 }

@@ -3,7 +3,8 @@ import {
     getSandbox,
     getSandboxes,
     getOperations,
-    runOperation
+    runOperation,
+    deleteSandbox
 } from 'data/sandboxesService';
 
 const PULL_TIMEOUT = 3000;
@@ -17,8 +18,8 @@ export default class Sandboxes extends LightningElement {
     cache = {};
     @api realmid;
     @track sandboxes = [];
-    @track error;
     @track loading = false;
+    @track sandboxIdToDelete = undefined;
     sandboxesFetched = false;
     activePull = 0;
 
@@ -40,14 +41,40 @@ export default class Sandboxes extends LightningElement {
         ).forEach((elem) => elem.toggle(sandboxId === elem.sandboxid));
     }
 
+    handleRefreshSandbox(e) {
+        const sandboxId = e.detail.id;
+        const sandboxIdx = this.sandboxes.findIndex(
+            (sandbox) => sandbox.id === sandboxId
+        );
+        // Set the sandbox row as "running operation" state
+        this.sandboxes[sandboxIdx].hasPendingOperation = true;
+
+        // Refresh the sandbox
+        getSandbox(sandboxId).then((sandboxResult) => {
+            if (sandboxResult.error || !sandboxResult.data) {
+                // Release the flag
+                this.sandboxes[sandboxIdx].hasPendingOperation = false;
+                this.dispatchEvent(
+                    new CustomEvent('refreshauth', {
+                        bubbles: true,
+                        composed: true
+                    })
+                );
+                return;
+            }
+
+            this.sandboxes[sandboxIdx] = sandboxResult.data;
+        });
+    }
+
     handleRunOperation(e) {
         const sandboxId = e.detail.id;
         const operation = e.detail.operation;
 
-        // Then the sandbox row as "running operation" state
         const sandboxIdx = this.sandboxes.findIndex(
             (sandbox) => sandbox.id === sandboxId
         );
+        // Set the sandbox row as "running operation" state
         this.sandboxes[sandboxIdx].hasPendingOperation = true;
         // Set the status as pending by default
         this.sandboxes[sandboxIdx].state = 'pending';
@@ -56,7 +83,12 @@ export default class Sandboxes extends LightningElement {
             if (result.error || !result.data) {
                 // Release the flag
                 this.sandboxes[sandboxIdx].hasPendingOperation = false;
-                // TODO
+                this.dispatchEvent(
+                    new CustomEvent('refreshauth', {
+                        bubbles: true,
+                        composed: true
+                    })
+                );
                 return;
             }
 
@@ -66,6 +98,47 @@ export default class Sandboxes extends LightningElement {
             }
             this.refreshSandboxRow(sandboxId, sandboxIdx, operation);
         });
+    }
+
+    handleDeleteSandbox(e) {
+        // Set the sandbox ID to delete
+        // This opens up the confirmation prompt
+        this.sandboxIdToDelete = e.detail.id;
+    }
+
+    handleDeleteSandboxConfirm() {
+        const sandboxId = this.sandboxIdToDelete;
+        const sandboxIdx = this.sandboxes.findIndex(
+            (sandbox) => sandbox.id === this.sandboxIdToDelete
+        );
+
+        deleteSandbox(this.sandboxIdToDelete).then((result) => {
+            if (result.error) {
+                // Remove the sandbox ID, meaning the prompt will be hidden
+                this.sandboxIdToDelete = undefined;
+                this.dispatchEvent(
+                    new CustomEvent('refreshauth', {
+                        bubbles: true,
+                        composed: true
+                    })
+                );
+                return;
+            }
+
+            // Remove the sandbox ID, meaning the prompt will be hidden
+            this.sandboxIdToDelete = undefined;
+
+            // Put the sandbox state as pending
+            if (result.data.operationState === 'pending') {
+                this.sandboxes[sandboxIdx].state = 'pending';
+            }
+            this.refreshSandboxRow(sandboxId, sandboxIdx);
+        });
+    }
+
+    handleDeleteSandboxCancel() {
+        // Remove the sandbox ID, meaning the prompt will be hidden
+        this.sandboxIdToDelete = undefined;
     }
 
     handleRefresh() {
@@ -136,17 +209,19 @@ export default class Sandboxes extends LightningElement {
         getSandboxes(this.realmid)
             .then((result) => {
                 if (result.error) {
-                    this.error =
-                        'Error while fetching sandboxes. Please ensure you are authenticated';
                     this.loading = false;
+                    this.dispatchEvent(
+                        new CustomEvent('refreshauth', {
+                            bubbles: true,
+                            composed: true
+                        })
+                    );
                     return;
                 }
 
                 result.data = result.data.map((sandbox) => {
                     sandbox.hasPendingOperation =
-                        ['creating', 'starting', 'stopping'].indexOf(
-                            sandbox.state
-                        ) > -1;
+                        ['starting', 'stopping'].indexOf(sandbox.state) > -1;
                     return sandbox;
                 });
 
@@ -170,11 +245,11 @@ export default class Sandboxes extends LightningElement {
         return this.sandboxes && this.sandboxes.length > 0;
     }
 
-    get hasError() {
-        return typeof this.error !== 'undefined';
-    }
-
     get isLoadingData() {
         return this.loading === true;
+    }
+
+    get showDeletePrompt() {
+        return this.sandboxIdToDelete !== undefined;
     }
 }

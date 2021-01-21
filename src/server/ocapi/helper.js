@@ -172,6 +172,14 @@ module.exports.call = async (req, method, url, data, nbRetry = 0) => {
             console.log('Error', err.message);
         }
 
+        // If the status is something else than 401
+        // Abort directly
+        // Only the 401 status means we might need to re-authenticate
+        if (err.response.status !== 401) {
+            return undefined;
+        }
+
+        // Only retry once
         if (nbRetry > 0) {
             return undefined;
         }
@@ -182,13 +190,15 @@ module.exports.call = async (req, method, url, data, nbRetry = 0) => {
             return undefined;
         }
 
-        const authResponse = auth.obtainToken(
+        // Try to re-authenticate based on the refresh token if any exist
+        const authResponse = await auth.obtainToken(
             req,
             config.ocapi.ACCOUNT_MANAGER_HOST,
             module.exports.getClientId(req),
             module.exports.getClientSecret(req),
             { grant_type: 'refresh_token', refresh_token: refreshToken }
         );
+        // If the authentication succeed, then re-try the API call that we were suppose to perform
         if (authResponse) {
             return module.exports.call(req, method, url, data, 1);
         }

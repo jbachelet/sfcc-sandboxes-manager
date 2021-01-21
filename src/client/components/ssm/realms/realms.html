@@ -83,16 +83,11 @@
                     </template>
 
                     <template if:false={hasRealms}>
-                        <template if:true={hasError}>
-                            <p class="slds-text-color_error">{error}</p>
-                        </template>
-                        <template if:false={hasError}>
-                            <p
-                                class="slds-text-align_center slds-text-title_caps slds-m-vertical_large"
-                            >
-                                No realms yet.
-                            </p>
-                        </template>
+                        <p
+                            class="slds-text-align_center slds-text-title_caps slds-m-vertical_large"
+                        >
+                            No realms yet.
+                        </p>
                     </template>
                 </template>
             </div>

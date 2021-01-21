@@ -37,19 +37,36 @@
                 </div>
             </template>
 
-            <a
-                href={url}
-                target="_blank"
-                class="slds-button slds-button_icon slds-button_icon-border-filled slds-button_icon-small"
-                title="Open"
-            >
-                <svg class="slds-button__icon" aria-hidden="true">
-                    <use
-                        xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#open"
-                    ></use>
-                </svg>
-                <span class="slds-assistive-text">Open</span>
-            </a>
+            <template if:true={canOpen}>
+                <a
+                    href={url}
+                    target="_blank"
+                    class="slds-button slds-button_icon slds-button_icon-border-filled slds-button_icon-small"
+                    title="Open"
+                >
+                    <svg class="slds-button__icon" aria-hidden="true">
+                        <use
+                            xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#open"
+                        ></use>
+                    </svg>
+                    <span class="slds-assistive-text">Open</span>
+                </a>
+            </template>
+
+            <template if:true={canRefresh}>
+                <button
+                    class="slds-button slds-button_icon slds-button_icon-border-filled slds-button_icon-small"
+                    title="Refresh"
+                    onclick={handleRefresh}
+                >
+                    <svg class="slds-button__icon" aria-hidden="true">
+                        <use
+                            xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#refresh"
+                        ></use>
+                    </svg>
+                    <span class="slds-assistive-text">Refresh</span>
+                </button>
+            </template>
 
             <template if:true={canStart}>
                 <button
@@ -66,6 +83,7 @@
                     <span class="slds-assistive-text">Start</span>
                 </button>
             </template>
+
             <template if:true={canStop}>
                 <button
                     class="slds-button slds-button_icon slds-button_icon-border-filled slds-button_icon-small"
@@ -81,6 +99,7 @@
                     <span class="slds-assistive-text">Stop</span>
                 </button>
             </template>
+
             <button
                 class="slds-button slds-button_icon slds-button_icon-border-filled slds-button_icon-small"
                 title="Details"
@@ -93,6 +112,7 @@
                 </svg>
                 <span class="slds-assistive-text">Details</span>
             </button>
+
             <template if:true={canDelete}>
                 <button
                     class="slds-button slds-button_icon slds-button_icon-error slds-button_icon-border-filled slds-button_icon-small"

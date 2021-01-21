@@ -70,7 +70,12 @@ export default class sandboxPanel extends LightningElement {
             (result) => {
                 if (result.error || !result.data) {
                     this.loadingUsage = false;
-                    // TODO
+                    this.dispatchEvent(
+                        new CustomEvent('refreshauth', {
+                            bubbles: true,
+                            composed: true
+                        })
+                    );
                     return;
                 }
 
@@ -91,7 +96,12 @@ export default class sandboxPanel extends LightningElement {
             (result) => {
                 if (result.error || !result.data) {
                     this.loadingUsage = false;
-                    // TODO
+                    this.dispatchEvent(
+                        new CustomEvent('refreshauth', {
+                            bubbles: true,
+                            composed: true
+                        })
+                    );
                     return;
                 }
 
@@ -112,7 +122,12 @@ export default class sandboxPanel extends LightningElement {
         getSettings(this.sandboxid).then((result) => {
             if (result.error || !result.data) {
                 this.loadingSettings = false;
-                // TODO
+                this.dispatchEvent(
+                    new CustomEvent('refreshauth', {
+                        bubbles: true,
+                        composed: true
+                    })
+                );
                 return;
             }
 
@@ -161,6 +176,17 @@ export default class sandboxPanel extends LightningElement {
 
             this.loading = true;
             getSandbox(this.sandboxid, true).then((result) => {
+                if (result.error || !result.data) {
+                    this.loading = false;
+                    this.dispatchEvent(
+                        new CustomEvent('refreshauth', {
+                            bubbles: true,
+                            composed: true
+                        })
+                    );
+                    return;
+                }
+
                 this.sandbox = result.data;
                 this.loading = false;
             });

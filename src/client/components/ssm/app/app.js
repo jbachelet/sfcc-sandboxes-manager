@@ -7,10 +7,18 @@ export default class App extends LightningElement {
     connectedCallback() {}
 
     renderedCallback() {
+        this.handleRefreshAuth();
+    }
+
+    handleRefreshAuth() {
         getDetails().then((result) => {
             this.authDetails = result;
             this.refreshSubComponents();
         });
+    }
+
+    handleOpenWelcomeModal() {
+        this.template.querySelector('ssm-welcomemodal').toggleModal(true);
     }
 
     handleOpenAuthModal() {
