@@ -3,7 +3,30 @@
 const config = {
     defaults: {
         host: 'localhost',
-        port: 8080
+        port: 8080,
+        ttl: 24,
+        ocapiSettings: [
+            {
+                client_id: '<your client id>',
+                resources: [
+                    {
+                        resource_id: '/**',
+                        methods: ['get', 'post', 'put', 'patch', 'delete'],
+                        read_attributes: '(**)',
+                        write_attributes: ''
+                    }
+                ]
+            }
+        ],
+        webDavSettings: [
+            {
+                client_id: '<your client id>',
+                permissions: [
+                    { path: '/cartridges', operations: ['read_write'] },
+                    { path: '/impex', operations: ['read_write'] }
+                ]
+            }
+        ]
     },
     distDir: './dist',
     sessionCookie: {

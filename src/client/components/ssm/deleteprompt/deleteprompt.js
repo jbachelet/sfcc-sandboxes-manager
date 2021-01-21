@@ -20,6 +20,7 @@ export default class DeletePrompt extends LightningElement {
 
     handleConfirm(e) {
         e.preventDefault();
+        e.target.setAttribute('disabled', true);
         this.dispatchEvent(new CustomEvent('confirmdeletion'));
     }
 
@@ -31,6 +32,12 @@ export default class DeletePrompt extends LightningElement {
 
     @api
     toggleModal(isOpened) {
+        Array.from(this.template.querySelectorAll('button')).forEach(
+            (button) => {
+                button.removeAttribute('disabled');
+            }
+        );
+
         if (isOpened) {
             this.cache.prompt.classList.add(this.classes.promptOpen);
             this.cache.background.classList.add(this.classes.backgroundOpen);

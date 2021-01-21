@@ -6,12 +6,36 @@
             >
         </div>
         <div class="slds-col">
-            <div class="slds-grid slds-grid_align-end">
+            <div class="slds-grid slds-grid_align-end slds-gutters">
+                <div class="slds-col">
+                    <button
+                        class="slds-button slds-button_brand"
+                        onclick={handleCreateSandbox}
+                    >
+                        <svg
+                            class="slds-button__icon slds-button__icon_left"
+                            aria-hidden="true"
+                        >
+                            <use
+                                xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#add"
+                            ></use>
+                        </svg>
+                        New Sandbox
+                    </button>
+                </div>
                 <div class="slds-col">
                     <button
                         class="slds-button slds-button_neutral"
                         onclick={handleRefresh}
                     >
+                        <svg
+                            class="slds-button__icon slds-button__icon_left"
+                            aria-hidden="true"
+                        >
+                            <use
+                                xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#refresh"
+                            ></use>
+                        </svg>
                         Refresh
                     </button>
                 </div>
@@ -118,4 +142,9 @@
             onclosedeleteprompt={handleDeleteSandboxCancel}
         ></ssm-deleteprompt>
     </template>
+
+    <ssm-newsandboxmodal
+        realmid={realmid}
+        oncreatesandbox={handleSandboxCreation}
+    ></ssm-newsandboxmodal>
 </template>

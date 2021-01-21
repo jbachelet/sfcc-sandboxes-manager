@@ -34,7 +34,7 @@ export default class AuthModal extends LightningElement {
         this.toggleModal(false);
     }
 
-    async handleLogin(e) {
+    handleLogin(e) {
         e.preventDefault();
 
         let isError = false;

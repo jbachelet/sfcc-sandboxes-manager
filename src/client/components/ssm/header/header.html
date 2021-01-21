@@ -2,10 +2,19 @@
     <header class="slds-global-header_container">
         <div class="slds-global-header slds-grid slds-grid_align-spread">
             <div class="slds-global-header__item">
-                <img
-                    src="/resources/slds/images/logo-noname.svg"
-                    style="height: 2em"
-                />
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col">
+                        <img
+                            src="/resources/slds/images/logo-noname.svg"
+                            style="height: 2rem"
+                        />
+                    </div>
+                    <div class="slds-col">
+                        <p class="slds-text-heading_large">
+                            Salesforce On-Demand Sandboxes Manager
+                        </p>
+                    </div>
+                </div>
             </div>
             <div class="slds-global-header__item">
                 <ul class="slds-global-actions">
@@ -99,8 +108,34 @@
                                 <ul
                                     class="slds-dropdown__list"
                                     role="menu"
-                                    aria-label="Show More"
+                                    aria-label="Show more"
                                 >
+                                    <template if:true={hasClientId}>
+                                        <li
+                                            class="slds-dropdown__item"
+                                            role="presentation"
+                                        >
+                                            <a
+                                                role="menuitem"
+                                                tabindex="0"
+                                                href="#"
+                                                onclick={onClickClientID}
+                                            >
+                                                <span title="Client ID">
+                                                    Client ID: {clientId}
+                                                </span>
+                                            </a>
+                                            <div
+                                                class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left slds-hide"
+                                                role="tooltip"
+                                                data-js-clientid-tooltip
+                                            >
+                                                <div class="slds-popover__body">
+                                                    Copied!
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </template>
                                     <li
                                         class="slds-dropdown__item"
                                         role="presentation"

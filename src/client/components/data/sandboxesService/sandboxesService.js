@@ -3,6 +3,7 @@
 import { httpGet, httpPost, httpDelete } from 'data/apiService';
 
 const URLS = {
+    createSandbox: '/sandboxes',
     getSandboxes: '/sandboxes?sortBy=instance&realmId={0}',
     getSandbox: '/sandboxes/{0}',
     getUsage: '/sandboxes/{0}/usage',
@@ -11,6 +12,21 @@ const URLS = {
         '/sandboxes/{0}/operations?sortBy=created&sortOrder=desc&operation={1}',
     runOperation: '/sandboxes/{0}/operations',
     deleteSandbox: '/sandboxes/{0}'
+};
+
+export const createSandbox = async (
+    realmId,
+    ttl,
+    ocapiSettings,
+    webdavSettings
+) => {
+    const response = await httpPost(URLS.createSandbox, {
+        realmId,
+        ttl,
+        ocapiSettings,
+        webdavSettings
+    });
+    return response;
 };
 
 export const getSandboxes = async (realmId) => {

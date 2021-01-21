@@ -6,7 +6,8 @@ const config = require('../../config');
 
 exports.details = (req, res) => {
     res.json({
-        authenticated: req.session.accessToken !== undefined
+        authenticated: req.session.accessToken !== undefined,
+        clientId: ocapiHelper.getClientId(req)
     });
 };
 

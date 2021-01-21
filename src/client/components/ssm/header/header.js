@@ -5,7 +5,8 @@ export default class Header extends LightningElement {
     selectors = {
         notAuthenticatedLink: '[data-js-not-authenticated]',
         authenticatedLinkCtnr: '.slds-dropdown-trigger_click',
-        authenticatedLink: '[data-js-authenticated]'
+        authenticatedLink: '[data-js-authenticated]',
+        clientIdTooltip: '[data-js-clientid-tooltip]'
     };
     classes = {
         hide: 'slds-hide',
@@ -13,6 +14,7 @@ export default class Header extends LightningElement {
     };
     cache = {};
     @track authenticated = false;
+    @track clientId = undefined;
 
     renderedCallback() {
         this.cache.notAuthenticatedLink = this.template.querySelector(
@@ -23,6 +25,9 @@ export default class Header extends LightningElement {
         );
         this.cache.logoutLink = this.template.querySelector(
             this.selectors.logoutLink
+        );
+        this.cache.clientIdTooltip = this.template.querySelector(
+            this.selectors.clientIdTooltip
         );
     }
 
@@ -48,6 +53,15 @@ export default class Header extends LightningElement {
         }
 
         ctnr.classList.add(this.classes.dropdownOpen);
+    }
+
+    onClickClientID(e) {
+        e.preventDefault();
+        navigator.clipboard.writeText(this.clientId);
+        this.cache.clientIdTooltip.classList.remove(this.classes.hide);
+        setTimeout(() => {
+            this.cache.clientIdTooltip.classList.add(this.classes.hide);
+        }, 3000);
     }
 
     onClickLogoutLink(e) {
@@ -77,5 +91,14 @@ export default class Header extends LightningElement {
 
         this.cache.notAuthenticatedLink.classList.remove(this.classes.hide);
         this.cache.authenticatedLink.classList.add(this.classes.hide);
+    }
+
+    @api
+    setClientId(clientId) {
+        this.clientId = clientId;
+    }
+
+    get hasClientId() {
+        return this.clientId !== undefined;
     }
 }

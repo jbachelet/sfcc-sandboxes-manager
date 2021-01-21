@@ -1,0 +1,147 @@
+<template>
+    <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="newsandbox-modal-header"
+        aria-modal="true"
+        aria-describedby="newsandbox-modal-content"
+        class="slds-modal"
+        data-js-modal
+    >
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <button
+                    class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                    title="Close"
+                    onclick={handleClose}
+                >
+                    <svg
+                        class="slds-button__icon slds-button__icon_large"
+                        aria-hidden="true"
+                    >
+                        <use
+                            xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#close"
+                        ></use>
+                    </svg>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2
+                    id="newsandbox-modal-header"
+                    class="slds-modal__title slds-hyphenate"
+                >
+                    New Sandbox
+                </h2>
+            </header>
+            <div
+                class="slds-modal__content slds-p-around_medium"
+                id="newsandbox-modal-content"
+            >
+                <fieldset class="slds-form-element slds-form-element_compound">
+                    <div class="slds-form-element__control">
+                        <div class="slds-form-element__row">
+                            <div class="slds-size_1-of-2">
+                                <div class="slds-form-element">
+                                    <label
+                                        class="slds-form-element__label"
+                                        for="realm-id-input"
+                                        >Realm ID</label
+                                    >
+                                    <div class="slds-form-element__control">
+                                        <input
+                                            type="text"
+                                            value={realmid}
+                                            id="realm-id-input"
+                                            class="slds-input"
+                                            data-js-realm-id
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                <div class="slds-form-element">
+                                    <label
+                                        class="slds-form-element__label"
+                                        for="ttl-input"
+                                        >TTL (in hours)</label
+                                    >
+                                    <div class="slds-form-element__control">
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            value={defaultTTL}
+                                            id="ttl-input"
+                                            class="slds-input"
+                                            data-js-ttl
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="slds-form-element">
+                    <label
+                        class="slds-form-element__label"
+                        for="ocapi-settings-input"
+                        >OCAPI Settings</label
+                    >
+                    <div class="slds-form-element__control">
+                        <textarea
+                            id="ocapi-settings-input"
+                            class="slds-textarea"
+                            aria-describedby="ocapi-input-help"
+                            rows="10"
+                            data-js-ocapi-settings
+                        >
+{defaultOcapiSettings}</textarea
+                        >
+                    </div>
+                    <div class="slds-form-element__help" id="ocapi-input-help">
+                        The "&#x3C;your client id&#x3E;" value will be replaced
+                        by the current client ID automatically.
+                    </div>
+                </div>
+                <div class="slds-form-element">
+                    <label
+                        class="slds-form-element__label"
+                        for="webdav-settings-input"
+                        >WebDAV Settings</label
+                    >
+                    <div class="slds-form-element__control">
+                        <textarea
+                            id="webdav-settings-input"
+                            class="slds-textarea"
+                            aria-describedby="webdav-input-help"
+                            rows="10"
+                            data-js-webdav-settings
+                        >
+{defaultWebDavSettings}</textarea
+                        >
+                        <div
+                            class="slds-form-element__help"
+                            id="webdav-input-help"
+                        >
+                            The "&#x3C;your client id&#x3E;" value will be
+                            replaced by the current client ID automatically.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="slds-modal__footer">
+                <button
+                    class="slds-button slds-button_neutral"
+                    onclick={handleClose}
+                >
+                    Cancel
+                </button>
+                <button
+                    class="slds-button slds-button_brand"
+                    onclick={handleCreate}
+                >
+                    Create
+                </button>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop" data-js-background></div>
+</template>

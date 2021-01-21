@@ -38,7 +38,63 @@ exports.list = async (req, res) => {
         data: []
     });
 };
-exports.create = (req, res) => res.send('TODO');
+exports.create = async (req, res) => {
+    const realmId = req.body.realmId;
+    if (!realmId) {
+        res.json({
+            error: true
+        });
+        return;
+    }
+
+    const ttl = parseInt(req.body.ttl, 10) || config.defaults.ttl;
+    let ocapiSettings = req.body.ocapiSettings || config.defaults.ocapiSettings;
+    let webdavSettings =
+        req.body.webdavSettings || config.defaults.webdavSettings;
+    const clientId = ocapi.getClientId(req);
+
+    // Replace the client ID by the one used here if needed
+    ocapiSettings = ocapiSettings.map((setting) => {
+        setting.client_id = setting.client_id.replace(
+            '<your client id>',
+            clientId
+        );
+        return setting;
+    });
+    webdavSettings = webdavSettings.map((setting) => {
+        setting.client_id = setting.client_id.replace(
+            '<your client id>',
+            clientId
+        );
+        return setting;
+    });
+
+    const result = await ocapi.call(
+        req,
+        'post',
+        config.ocapi.SANDBOXES_ENDPOINTS.API_SANDBOXES,
+        {
+            realm: realmId,
+            ttl: ttl,
+            settings: {
+                ocapi: ocapiSettings,
+                webdav: webdavSettings
+            }
+        }
+    );
+
+    if (result?.data) {
+        res.json({
+            error: false,
+            data: result.data
+        });
+        return;
+    }
+
+    res.json({
+        error: true
+    });
+};
 exports.get = async (req, res) => {
     const sandboxId = req.params.sandboxId;
     const storage = req.query.storage || false;

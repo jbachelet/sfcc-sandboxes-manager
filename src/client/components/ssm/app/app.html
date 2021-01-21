@@ -5,10 +5,16 @@
         onlogout={handleLogout}
     ></ssm-header>
 
-    <div class="slds-grid slds-gutters">
+    <!-- Toast -->
+    <ssm-toast title={toastTitle} type={toastType}></ssm-toast>
+
+    <div class="slds-grid">
         <div class="slds-col">
             <!-- Realms list component -->
-            <ssm-realms onrefreshauth={handleRefreshAuth}></ssm-realms>
+            <ssm-realms
+                onrefreshauth={handleRefreshAuth}
+                onopentoast={handleOpenToast}
+            ></ssm-realms>
         </div>
     </div>
 

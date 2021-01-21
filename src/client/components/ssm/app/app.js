@@ -1,8 +1,10 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement } from 'lwc';
 import { getDetails } from 'data/authService';
 
 export default class App extends LightningElement {
-    @track authDetails = {};
+    authDetails = {};
+    toastTitle = undefined;
+    toastType = 'success';
 
     connectedCallback() {}
 
@@ -15,6 +17,12 @@ export default class App extends LightningElement {
             this.authDetails = result;
             this.refreshSubComponents();
         });
+    }
+
+    handleOpenToast(e) {
+        this.toastTitle = e.detail.title;
+        this.toastType = e.detail.type;
+        this.template.querySelector('ssm-toast').toggle(true);
     }
 
     handleOpenWelcomeModal() {
@@ -32,6 +40,9 @@ export default class App extends LightningElement {
 
     refreshSubComponents() {
         // Refresh the header
+        this.template
+            .querySelector('ssm-header')
+            .setClientId(this.authDetails.clientId);
         this.template
             .querySelector('ssm-header')
             .refreshView(this.authDetails.authenticated);

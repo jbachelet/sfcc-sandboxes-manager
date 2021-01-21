@@ -39,9 +39,7 @@ export default class Realms extends LightningElement {
 
     @api
     refreshView(isAuthenticated) {
-        if (isAuthenticated) {
-            this.authenticated = isAuthenticated;
-        }
+        this.authenticated = isAuthenticated;
 
         if (!this.authenticated) {
             return;

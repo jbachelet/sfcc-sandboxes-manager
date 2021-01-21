@@ -1,0 +1,18 @@
+<template>
+    <div class="slds-notify_container slds-is-relative slds-hide" data-js-toast>
+        <div class={containerClass} role="status">
+            <span class="slds-assistive-text">{type}</span>
+            <span
+                class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top"
+                title={title}
+            >
+                <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                    <use xlink:href={icon}></use>
+                </svg>
+            </span>
+            <div class="slds-notify__content">
+                <h2 class="slds-text-heading_small">{title}</h2>
+            </div>
+        </div>
+    </div>
+</template>

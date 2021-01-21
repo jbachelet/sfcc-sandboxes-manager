@@ -1,5 +1,6 @@
 import { LightningElement, api, track } from 'lwc';
 import {
+    createSandbox,
     getSandbox,
     getSandboxes,
     getOperations,
@@ -92,6 +93,18 @@ export default class Sandboxes extends LightningElement {
                 return;
             }
 
+            // Display toast for success
+            this.dispatchEvent(
+                new CustomEvent('opentoast', {
+                    bubbles: true,
+                    composed: true,
+                    detail: {
+                        title: 'The operation has been started.',
+                        type: 'success'
+                    }
+                })
+            );
+
             // Put the sandbox state as pending
             if (result.data.operationState === 'pending') {
                 this.sandboxes[sandboxIdx].state = 'pending';
@@ -124,6 +137,19 @@ export default class Sandboxes extends LightningElement {
                 );
                 return;
             }
+
+            // Display toast for success
+            this.dispatchEvent(
+                new CustomEvent('opentoast', {
+                    bubbles: true,
+                    composed: true,
+                    detail: {
+                        title:
+                            'The sandbox deletion operation has been started.',
+                        type: 'success'
+                    }
+                })
+            );
 
             // Remove the sandbox ID, meaning the prompt will be hidden
             this.sandboxIdToDelete = undefined;
@@ -195,6 +221,49 @@ export default class Sandboxes extends LightningElement {
 
                 this.sandboxes[sandboxIdx] = sandboxResult.data;
             });
+        });
+    }
+
+    handleCreateSandbox(e) {
+        e.preventDefault();
+        this.template.querySelector('ssm-newsandboxmodal').toggleModal(true);
+    }
+
+    handleSandboxCreation(e) {
+        this.loading = true;
+
+        createSandbox(
+            e.detail.realmId,
+            e.detail.ttl,
+            e.detail.ocapiSettings,
+            e.detail.webdavSettings
+        ).then((result) => {
+            if (result.error) {
+                this.loading = false;
+                this.dispatchEvent(
+                    new CustomEvent('refreshauth', {
+                        bubbles: true,
+                        composed: true
+                    })
+                );
+                return;
+            }
+
+            this.loading = false;
+
+            // Display toast for success
+            this.dispatchEvent(
+                new CustomEvent('opentoast', {
+                    bubbles: true,
+                    composed: true,
+                    detail: {
+                        title:
+                            'The sandbox creation operation has been started.',
+                        type: 'success'
+                    }
+                })
+            );
+            this.refreshView(true);
         });
     }
 

@@ -41,12 +41,18 @@ module.exports.getOptions = (method, host, path, isJson, authOption) => {
 module.exports.getAccessToken = (req) => req.session.accessToken;
 module.exports.getRefreshToken = (req) => req.session.refreshToken;
 module.exports.getClientId = (req) => {
+    if (!req.session.clientCredentials) {
+        return undefined;
+    }
     const credentials = Buffer.from(req.session.clientCredentials, 'base64')
         .toString()
         .split(':');
     return credentials ? credentials[0] : undefined;
 };
 module.exports.getClientSecret = (req) => {
+    if (!req.session.clientCredentials) {
+        return undefined;
+    }
     const credentials = Buffer.from(req.session.clientCredentials, 'base64')
         .toString()
         .split(':');
