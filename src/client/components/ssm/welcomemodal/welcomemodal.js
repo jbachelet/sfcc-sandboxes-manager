@@ -15,7 +15,6 @@ export default class WelcomeModal extends LightningElement {
     };
     cache = {};
     @track host = undefined;
-    @track port = undefined;
 
     renderedCallback() {
         if (this.cache.modal) {
@@ -70,9 +69,8 @@ export default class WelcomeModal extends LightningElement {
     }
 
     @api
-    refreshView(host, port) {
+    refreshView(host) {
         this.host = host;
-        this.port = port;
     }
 
     get redirectURI() {
@@ -80,8 +78,6 @@ export default class WelcomeModal extends LightningElement {
             return '';
         }
 
-        return `https://${this.host}${
-            this.port && this.port !== '80' ? `:${this.port}` : ''
-        }/auth/login_reentry`;
+        return `https://${this.host}/auth/login_reentry`;
     }
 }
