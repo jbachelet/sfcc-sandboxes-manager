@@ -3,7 +3,7 @@
 const config = {
     defaults: {
         host: 'localhost',
-        port: 8080,
+        port: 80,
         ttl: 24,
         ocapiSettings: [
             {
@@ -42,15 +42,14 @@ const config = {
  */
 const HOST =
     process.env.OAUTH_REDIRECT_HOST || process.env.HOST || config.defaults.host;
-const PORT = process.env.PORT || config.defaults.port;
 const ACCOUNT_MANAGER_HOST =
     process.env.ACCOUNT_MANAGER_HOST || 'account.demandware.com';
 const ACCOUNT_MANAGER_AUTH_PATH = '/dwsso/oauth2/authorize';
 const ACCOUNT_MANAGER_URL = `https://${ACCOUNT_MANAGER_HOST}${ACCOUNT_MANAGER_AUTH_PATH}`;
 const OAUTH_REDIRECT_PATH = '/auth/login_reentry';
-const OAUTH_REDIRECT_URL = `http${HOST === 'localhost' ? '' : 's'}://${HOST}${
-    PORT !== '80' ? `:${PORT}` : ''
-}${OAUTH_REDIRECT_PATH}`;
+const OAUTH_REDIRECT_URL = `http${
+    HOST === 'localhost' ? '' : 's'
+}://${HOST}${OAUTH_REDIRECT_PATH}`;
 const GRANT = {
     grant: 'authorization_code',
     response_type: 'code',
