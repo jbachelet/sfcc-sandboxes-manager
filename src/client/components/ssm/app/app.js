@@ -57,6 +57,10 @@ export default class App extends LightningElement {
         this.template
             .querySelector('ssm-header')
             .refreshView(this.authDetails.authenticated);
+        // Refresh the Welcome modal
+        this.template
+            .querySelector('ssm-welcomemodal')
+            .refreshView(this.authDetails.host, this.authDetails.port);
         // Render or not the auth modal automatically
         this.template
             .querySelector('ssm-authmodal')
