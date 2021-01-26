@@ -10,16 +10,22 @@
         "cookie-parser": "^1.4.5",
         "express": "^4.17.1",
         "express-session": "^1.17.1",
+        "eslint": "^7.15.0",
         "jsonwebtoken": "^8.3.0",
         "helmet": "^4.2.0",
+        "husky": "^4.3.4",
+        "lint-staged": "^10.5.3",
         "lwc-services": "^2.3.0",
-        "lwc-webpack-plugin": "^0.3.0",
+        "prettier": "^2.2.1",
         "redis": "^3.0.2",
         "@salesforce-ux/design-system": "2.13.7",
+        "lwc-webpack-plugin": "^0.3.0",
         "@lwc/synthetic-shadow": "^1.8.7"
     },
     "devDependencies": {
+        "axios": "^0.21.0",
         "compression": "^1.7.4",
+        "cookie-parser": "^1.4.5",
         "express": "^4.17.1",
         "express-session": "^1.17.1",
         "eslint": "^7.15.0",
@@ -32,13 +38,12 @@
         "redis": "^3.0.2",
         "@salesforce-ux/design-system": "2.13.7",
         "lwc-webpack-plugin": "^0.3.0",
-        "@lwc/synthetic-shadow": "^1.8.7",
-        "sfcc-ci": "git://github.com/jordanebachelet/sfcc-ci.git#64291544bdf9bd4709f9e4c6eefcce561241d5ac"
+        "@lwc/synthetic-shadow": "^1.8.7"
     },
     "engines": {
-        "node": ">=10.13.0",
-        "npm": ">=6.4.1",
-        "yarn": ">=1.9.4"
+        "node": "14.15.4",
+        "npm": "6.4.1",
+        "yarn": ">=1.22.0"
     },
     "homepage": "https://github.com/jbachelet/sfcc-sandboxes-manager",
     "husky": {
