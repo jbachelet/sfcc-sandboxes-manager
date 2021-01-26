@@ -12,6 +12,10 @@ export default class DeletePrompt extends LightningElement {
     @api sandboxid;
 
     renderedCallback() {
+        if (this.cache.prompt) {
+            return;
+        }
+
         this.cache.prompt = this.template.querySelector(this.selectors.prompt);
         this.cache.background = this.template.querySelector(
             this.selectors.background

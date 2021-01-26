@@ -11,6 +11,7 @@ export default class RealmContent extends LightningElement {
     cache = {};
     @api realm;
     @api index;
+    @api userinfos;
     @track active = false;
 
     renderedCallback() {
@@ -37,6 +38,26 @@ export default class RealmContent extends LightningElement {
         }
     }
 
+    handleChangeLabel() {
+        this.dispatchEvent(
+            new CustomEvent('changelabel', {
+                detail: {
+                    id: this.realm.id
+                }
+            })
+        );
+    }
+
+    handleUpdateConfiguration() {
+        this.dispatchEvent(
+            new CustomEvent('openrealmpanel', {
+                detail: {
+                    id: this.realm.id
+                }
+            })
+        );
+    }
+
     get navid() {
         return `${this.realm.id}__nav`;
     }
@@ -49,5 +70,9 @@ export default class RealmContent extends LightningElement {
         return `slds-vertical-tabs__content ${
             this.active ? 'slds-show' : 'slds-hide'
         }`;
+    }
+
+    get hasRealmLabel() {
+        return this.realm.label && this.realm.label.length > 0;
     }
 }

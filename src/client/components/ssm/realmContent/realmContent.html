@@ -5,6 +5,71 @@
         role="tabpanel"
         aria-labelledby={navid}
     >
-        <ssm-sandboxes realmid={realm.id}></ssm-sandboxes>
+        <div class="slds-grid">
+            <div class="slds-col">
+                <span class="slds-text-heading_small">Realm details</span>
+                <div>
+                    <p>Realm ID: <strong>{realm.id}</strong></p>
+                    <template if:true={hasRealmLabel}>
+                        <p>Realm Label: <strong>{realm.label}</strong></p>
+                        <p class="slds-text-body_small">
+                            <em
+                                >The label is only used for presentation purpose
+                                within this tool</em
+                            >
+                        </p>
+                    </template>
+                </div>
+            </div>
+            <div class="slds-col">
+                <div class="slds-grid slds-grid_align-end slds-gutters">
+                    <div class="slds-col">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <button
+                                    class="slds-button slds-button_outline-brand"
+                                    type="button"
+                                    onclick={handleChangeLabel}
+                                >
+                                    <svg
+                                        class="slds-button__icon slds-button__icon_left"
+                                        aria-hidden="true"
+                                    >
+                                        <use
+                                            xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#display_text"
+                                        ></use>
+                                    </svg>
+                                    <template if:false={hasRealmLabel}>
+                                        Set realm label
+                                    </template>
+                                    <template if:true={hasRealmLabel}>
+                                        Change realm label
+                                    </template>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col">
+                        <button
+                            class="slds-button slds-button_outline-brand"
+                            type="button"
+                            onclick={handleUpdateConfiguration}
+                        >
+                            <svg
+                                class="slds-button__icon slds-button__icon_left"
+                                aria-hidden="true"
+                            >
+                                <use
+                                    xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#record_update"
+                                ></use>
+                            </svg>
+                            Update realm configuration
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <ssm-sandboxes realmid={realm.id} userinfos={userinfos}></ssm-sandboxes>
     </div>
 </template>

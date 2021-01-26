@@ -11,13 +11,20 @@ const performCall = async (url, method, data) => {
     if (data) {
         options.body = JSON.stringify(data);
     }
-    const response = await fetch(url, options);
-    const json = await response.json();
-    if (!response.ok || response.error === true) {
-        console.log(`Error: ${response.status} - ${json}`);
-    }
 
-    return json;
+    let json;
+    try {
+        const response = await fetch(url, options);
+        json = await response.json();
+        if (!response.ok || response.error === true) {
+            console.error(`Error: ${response.status} - ${json}`);
+        }
+
+        return json;
+    } catch (e) {
+        console.error(e);
+        return json;
+    }
 };
 
 export const httpGet = async (url) => {
@@ -27,6 +34,11 @@ export const httpGet = async (url) => {
 
 export const httpPost = async (url, data) => {
     const json = await performCall(url, 'POST', data);
+    return json;
+};
+
+export const httpPatch = async (url, data) => {
+    const json = await performCall(url, 'PATCH', data);
     return json;
 };
 

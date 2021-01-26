@@ -99,7 +99,7 @@
                                 >
                                     <img
                                         alt="Person name"
-                                        src="/resources/slds/images/avatar2.jpg"
+                                        src="/resources/slds/images/profile_avatar_200.png"
                                         title="User avatar"
                                     />
                                 </span>
@@ -110,7 +110,37 @@
                                     role="menu"
                                     aria-label="Show more"
                                 >
-                                    <template if:true={hasClientId}>
+                                    <template if:true={hasUserInfos}>
+                                        <li
+                                            class="slds-dropdown__item"
+                                            role="presentation"
+                                        >
+                                            <a
+                                                role="menuitem"
+                                                tabindex="0"
+                                                href="#"
+                                                onclick={onClickPreventDefault}
+                                            >
+                                                <span title="User name">
+                                                    {userInfos.name}
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li
+                                            class="slds-dropdown__item"
+                                            role="presentation"
+                                        >
+                                            <a
+                                                role="menuitem"
+                                                tabindex="0"
+                                                href="#"
+                                                onclick={onClickPreventDefault}
+                                            >
+                                                <span title="User ID">
+                                                    {userInfos.id}
+                                                </span>
+                                            </a>
+                                        </li>
                                         <li
                                             class="slds-dropdown__item"
                                             role="presentation"
@@ -122,7 +152,7 @@
                                                 onclick={onClickClientID}
                                             >
                                                 <span title="Client ID">
-                                                    Client ID: {clientId}
+                                                    {userInfos.clientId}
                                                 </span>
                                             </a>
                                             <div

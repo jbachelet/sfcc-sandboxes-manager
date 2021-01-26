@@ -60,7 +60,7 @@ const GRANT = {
 const AUTHENTICATION_URL = `${ACCOUNT_MANAGER_URL}?client_id={0}&redirect_uri=${GRANT.redirect_uri}&response_type=${GRANT.response_type}`;
 
 const API_HOST = 'admin.us01.dx.commercecloud.salesforce.com';
-const API_BASE = API_HOST + '/api/v1';
+const API_BASE = `${API_HOST}/api/${process.env.API_VERSION || 'v1'}`;
 const API_SANDBOXES = API_BASE + '/sandboxes';
 const SANDBOXES_ENDPOINTS = {
     API_BASE,

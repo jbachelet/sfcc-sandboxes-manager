@@ -7,6 +7,56 @@
         </div>
         <div class="slds-col">
             <div class="slds-grid slds-grid_align-end slds-gutters">
+                <template if:true={hasUserInfos}>
+                    <div class="slds-col">
+                        <div class="slds-form-element">
+                            <label class="slds-checkbox_toggle slds-grid">
+                                <span
+                                    class="slds-form-element__label slds-m-bottom_none"
+                                    >Only my sandboxes</span
+                                >
+                                <input
+                                    type="checkbox"
+                                    id="sandboxes-filter-onlymine"
+                                    aria-describedby="sandboxes-filter-onlymine-describe"
+                                    onchange={handleFilterOnlyMineChange}
+                                    data-js-sandbox-filter-onlymine
+                                />
+                                <span
+                                    id="sandboxes-filter-onlymine-describe"
+                                    class="slds-checkbox_faux_container"
+                                    aria-live="assertive"
+                                >
+                                    <span class="slds-checkbox_faux"></span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="slds-col">
+                        <div class="slds-form-element">
+                            <label class="slds-checkbox_toggle slds-grid">
+                                <span
+                                    class="slds-form-element__label slds-m-bottom_none"
+                                    >Include deleted sandboxes</span
+                                >
+                                <input
+                                    type="checkbox"
+                                    id="sandboxes-filter-include-deleted"
+                                    aria-describedby="sandboxes-filter-include-deleted-describe"
+                                    onchange={handleFilterIncludeDeletedChange}
+                                    data-js-sandbox-filter-include-deleted
+                                />
+                                <span
+                                    id="sandboxes-filter-include-deleted-describe"
+                                    class="slds-checkbox_faux_container"
+                                    aria-live="assertive"
+                                >
+                                    <span class="slds-checkbox_faux"></span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </template>
                 <div class="slds-col">
                     <button
                         class="slds-button slds-button_brand"
@@ -17,10 +67,10 @@
                             aria-hidden="true"
                         >
                             <use
-                                xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#add"
+                                xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#record_create"
                             ></use>
                         </svg>
-                        New Sandbox
+                        New sandbox
                     </button>
                 </div>
                 <div class="slds-col">
@@ -36,7 +86,7 @@
                                 xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#refresh"
                             ></use>
                         </svg>
-                        Refresh
+                        Refresh sandboxes list
                     </button>
                 </div>
             </div>
@@ -61,11 +111,6 @@
                                 <th scope="col">
                                     <div class="slds-truncate" title="ID">
                                         ID
-                                    </div>
-                                </th>
-                                <th scope="col">
-                                    <div class="slds-truncate" title="Realm">
-                                        Realm
                                     </div>
                                 </th>
                                 <th scope="col">
@@ -128,7 +173,8 @@
                     <p
                         class="slds-text-align_center slds-text-title_caps slds-m-vertical_large"
                     >
-                        No sandboxes yet.
+                        No sandboxes yet, or you don't have the "Sandbox API
+                        User" role within the Account Manager for this realm.
                     </p>
                 </template>
             </template>

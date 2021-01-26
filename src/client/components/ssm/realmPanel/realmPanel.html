@@ -1,0 +1,115 @@
+<template>
+    <div
+        class="slds-panel slds-size_medium slds-panel_docked slds-panel_docked-right slds-size_large"
+        aria-hidden="true"
+        data-js-panel
+    >
+        <div class="slds-panel__header">
+            <h2
+                class="slds-panel__header-title slds-text-heading_small slds-truncate"
+                title="Realm details"
+            >
+                Realm details
+                <template if:true={hasRealm}>
+                    <span class="slds-m-left_medium">
+                        <template if:true={realm.enabled}>
+                            <span class="slds-badge slds-theme_success"
+                                >Enabled</span
+                            >
+                        </template>
+                        <template if:false={realm.enabled}>
+                            <span class="slds-badge slds-theme_error"
+                                >Disabled</span
+                            >
+                        </template>
+                    </span>
+                </template>
+            </h2>
+            <button
+                class="slds-button slds-button_icon slds-button_icon-small slds-panel__close"
+                title="Realm details"
+                onclick={handleClose}
+            >
+                <svg class="slds-button__icon" aria-hidden="true">
+                    <use
+                        xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#close"
+                    ></use>
+                </svg>
+                <span class="slds-assistive-text">Realm details</span>
+            </button>
+        </div>
+        <div class="slds-panel__body">
+            <template if:true={isLoadingData}>
+                <div role="status" class="slds-spinner slds-spinner_small">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </template>
+            <template if:false={isLoadingData}>
+                <template if:true={hasRealm}>
+                    <p>Realm ID: {realmid}</p>
+                    <template
+                        if:true={realm.configuration.sandbox.localUsersAllowed}
+                    >
+                        <p>Local users <strong>allowed</strong>.</p>
+                    </template>
+                    <template
+                        if:false={realm.configuration.sandbox.localUsersAllowed}
+                    >
+                        <p>Local users <strong>not allowed</strong>.</p>
+                    </template>
+                    <p class="slds-m-bottom_small">
+                        Total number of sandboxes:
+                        {realm.configuration.sandbox.totalNumberOfSandboxes}
+                    </p>
+                    <div class="slds-form-element">
+                        <label
+                            class="slds-form-element__label"
+                            for="text-input-id-1"
+                        >
+                            Default Sandbox TTL (in hours)
+                        </label>
+                        <div class="slds-form-element__control">
+                            <input
+                                type="number"
+                                data-js-default-ttl
+                                min="0"
+                                class="slds-input"
+                                value={realm.configuration.sandbox.sandboxTTL.defaultValue}
+                            />
+                        </div>
+                    </div>
+                    <div class="slds-form-element">
+                        <label
+                            class="slds-form-element__label"
+                            for="text-input-id-1"
+                        >
+                            Maximum Sandbox TTL (in hours)
+                        </label>
+                        <div class="slds-form-element__control">
+                            <input
+                                type="number"
+                                data-js-maximum-ttl
+                                min="0"
+                                class="slds-input"
+                                value={realm.configuration.sandbox.sandboxTTL.maximum}
+                            />
+                        </div>
+                    </div>
+                    <div class="slds-form-element slds-m-top_small">
+                        <div class="slds-form-element__control">
+                            <button
+                                class="slds-button slds-button_brand slds-button_stretch"
+                                type="button"
+                                onclick={handleApplyConfiguration}
+                            >
+                                Update configuration
+                            </button>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </div>
+</template>

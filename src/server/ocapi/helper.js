@@ -162,7 +162,7 @@ module.exports.call = async (req, method, url, data, nbRetry = 0) => {
         const response = await axios(options);
         // Ensure the response is valid
         module.exports.ensureValidResponse(req, undefined, response.data);
-        return response.data;
+        return response;
     } catch (err) {
         if (err.response) {
             // Request made and server responded
@@ -181,19 +181,28 @@ module.exports.call = async (req, method, url, data, nbRetry = 0) => {
         // If the status is something else than 401
         // Abort directly
         // Only the 401 status means we might need to re-authenticate
-        if (err.response.status !== 401) {
-            return undefined;
+        if (err?.response?.status !== 401) {
+            return {
+                status: err.response.status,
+                data: undefined
+            };
         }
 
         // Only retry once
         if (nbRetry > 0) {
-            return undefined;
+            return {
+                status: err?.response?.status,
+                data: undefined
+            };
         }
 
         // If failing, retry just one time thanks to the refresh token, if any
         const refreshToken = module.exports.getRefreshToken(req);
         if (!refreshToken) {
-            return undefined;
+            return {
+                status: err?.response?.status,
+                data: undefined
+            };
         }
 
         // Try to re-authenticate based on the refresh token if any exist
@@ -209,6 +218,32 @@ module.exports.call = async (req, method, url, data, nbRetry = 0) => {
             return module.exports.call(req, method, url, data, 1);
         }
 
-        return undefined;
+        return {
+            status: err?.response?.status,
+            data: undefined
+        };
     }
+};
+
+/**
+ * Prepare the response based on the API result
+ *
+ * @param {Object} result The result from the API call
+ *
+ * @return {Object} the object to pass in the server's response
+ */
+module.exports.prepareResponse = (result) => {
+    // Return an error if the HTTP Status code is greater than 210
+    // Or if no data is sent
+    if (result.status > 210 || !result?.data?.data) {
+        return {
+            error: true,
+            status: result.status
+        };
+    }
+
+    return {
+        error: false,
+        data: result.data.data
+    };
 };

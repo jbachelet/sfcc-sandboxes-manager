@@ -1,7 +1,8 @@
 import { LightningElement, api, track } from 'lwc';
 import { getSandbox, getUsage, getSettings } from 'data/sandboxesService';
+import { handleResponse } from 'helpers/ui';
 
-export default class sandboxPanel extends LightningElement {
+export default class SandboxPanel extends LightningElement {
     selectors = {
         panel: '[data-js-panel]',
         tabItems: '[data-js-tab-item]',
@@ -68,19 +69,13 @@ export default class sandboxPanel extends LightningElement {
         this.loadingUsage = true;
         getUsage(this.sandboxid, this.thirtyDaysFromToday, this.today).then(
             (result) => {
-                if (result.error || !result.data) {
-                    this.loadingUsage = false;
-                    this.dispatchEvent(
-                        new CustomEvent('refreshauth', {
-                            bubbles: true,
-                            composed: true
-                        })
-                    );
+                this.loadingUsage = false;
+
+                if (!handleResponse(this, result)) {
                     return;
                 }
 
                 this.sandbox.usage = result.data;
-                this.loadingUsage = false;
             }
         );
     }
@@ -94,19 +89,13 @@ export default class sandboxPanel extends LightningElement {
         this.loadingUsage = true;
         getUsage(this.sandboxid, this.usageFrom, this.usageTo).then(
             (result) => {
-                if (result.error || !result.data) {
-                    this.loadingUsage = false;
-                    this.dispatchEvent(
-                        new CustomEvent('refreshauth', {
-                            bubbles: true,
-                            composed: true
-                        })
-                    );
+                this.loadingUsage = false;
+
+                if (!handleResponse(this, result)) {
                     return;
                 }
 
                 this.sandbox.usage = result.data;
-                this.loadingUsage = false;
             }
         );
     }
@@ -120,19 +109,13 @@ export default class sandboxPanel extends LightningElement {
 
         this.loadingSettings = true;
         getSettings(this.sandboxid).then((result) => {
-            if (result.error || !result.data) {
-                this.loadingSettings = false;
-                this.dispatchEvent(
-                    new CustomEvent('refreshauth', {
-                        bubbles: true,
-                        composed: true
-                    })
-                );
+            this.loadingSettings = false;
+
+            if (!handleResponse(this, result)) {
                 return;
             }
 
             this.sandbox.settings = result.data;
-            this.loadingSettings = false;
         });
     }
 
@@ -176,19 +159,14 @@ export default class sandboxPanel extends LightningElement {
 
             this.loading = true;
             getSandbox(this.sandboxid, true).then((result) => {
-                if (result.error || !result.data) {
-                    this.loading = false;
-                    this.dispatchEvent(
-                        new CustomEvent('refreshauth', {
-                            bubbles: true,
-                            composed: true
-                        })
-                    );
+                this.loading = false;
+
+                if (!handleResponse(this, result)) {
+                    this.toggle(false);
                     return;
                 }
 
                 this.sandbox = result.data;
-                this.loading = false;
             });
         } else {
             this.cache.panel.classList.remove(this.classes.open);
@@ -198,6 +176,15 @@ export default class sandboxPanel extends LightningElement {
 
     get hasSandbox() {
         return this.sandbox !== undefined;
+    }
+
+    get hasSandboxStorageLoaded() {
+        return (
+            this.sandbox &&
+            this.sandbox.storage &&
+            this.sandbox.storage.sharedata &&
+            this.sandbox.storage.realmdata
+        );
     }
 
     get hasSandboxUsageLoaded() {
@@ -222,6 +209,28 @@ export default class sandboxPanel extends LightningElement {
 
     get createdAt() {
         const d = new Date(this.sandbox.createdAt);
+        return `${d.toLocaleDateString('en-US')} ${d.toLocaleTimeString(
+            'en-US'
+        )}`;
+    }
+
+    get deletedAt() {
+        if (!this.sandbox.deletedAt) {
+            return '';
+        }
+
+        const d = new Date(this.sandbox.deletedAt);
+        return `${d.toLocaleDateString('en-US')} ${d.toLocaleTimeString(
+            'en-US'
+        )}`;
+    }
+
+    get endOfLife() {
+        if (!this.sandbox.eol) {
+            return '';
+        }
+
+        const d = new Date(this.sandbox.eol);
         return `${d.toLocaleDateString('en-US')} ${d.toLocaleTimeString(
             'en-US'
         )}`;
@@ -295,6 +304,14 @@ export default class sandboxPanel extends LightningElement {
 
     get today() {
         return this.formatDate(new Date());
+    }
+
+    get hasEOL() {
+        return this.sandbox && this.sandbox.eol;
+    }
+
+    get hasDeletedDetails() {
+        return this.sandbox && this.sandbox.deletedAt && this.sandbox.deletedBy;
     }
 
     formatDate(date) {

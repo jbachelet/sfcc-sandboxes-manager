@@ -1,14 +1,19 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, track } from 'lwc';
 import { getDetails } from 'data/authService';
 
 export default class App extends LightningElement {
     authDetails = {};
+    @track userInfos = undefined;
     toastTitle = undefined;
     toastType = 'success';
-
-    connectedCallback() {}
+    rendered = false;
 
     renderedCallback() {
+        if (this.rendered) {
+            return;
+        }
+
+        this.rendered = true;
         this.handleRefreshAuth();
     }
 
@@ -38,11 +43,17 @@ export default class App extends LightningElement {
         this.refreshSubComponents();
     }
 
+    handleUserInfos(e) {
+        // Same user infos, abort
+        if (this.userInfos && this.userInfos.id === e.detail.userInfos.id) {
+            return;
+        }
+
+        this.userInfos = e.detail.userInfos;
+    }
+
     refreshSubComponents() {
         // Refresh the header
-        this.template
-            .querySelector('ssm-header')
-            .setClientId(this.authDetails.clientId);
         this.template
             .querySelector('ssm-header')
             .refreshView(this.authDetails.authenticated);
@@ -50,7 +61,6 @@ export default class App extends LightningElement {
         this.template
             .querySelector('ssm-authmodal')
             .toggleModal(!this.authDetails.authenticated);
-
         // Display authenticated components
         this.template
             .querySelector('ssm-realms')

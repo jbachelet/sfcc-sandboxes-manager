@@ -1,5 +1,7 @@
 import { LightningElement, api, track } from 'lwc';
 import { logout } from 'data/authService';
+import { getMe } from 'data/meService';
+import { handleResponse } from 'helpers/ui';
 
 export default class Header extends LightningElement {
     selectors = {
@@ -14,7 +16,7 @@ export default class Header extends LightningElement {
     };
     cache = {};
     @track authenticated = false;
-    @track clientId = undefined;
+    @track userInfos = undefined;
 
     renderedCallback() {
         this.cache.notAuthenticatedLink = this.template.querySelector(
@@ -64,6 +66,10 @@ export default class Header extends LightningElement {
         }, 3000);
     }
 
+    onClickPreventDefault(e) {
+        e.preventDefault();
+    }
+
     onClickLogoutLink(e) {
         e.preventDefault();
         logout().then((result) => {
@@ -79,6 +85,25 @@ export default class Header extends LightningElement {
         });
     }
 
+    refreshUserInfos() {
+        getMe().then((result) => {
+            if (!handleResponse(this, result)) {
+                return;
+            }
+
+            this.userInfos = result.data.user;
+            this.userInfos.clientId = result.data.client.id;
+
+            this.dispatchEvent(
+                new CustomEvent('userinfos', {
+                    detail: {
+                        userInfos: this.userInfos
+                    }
+                })
+            );
+        });
+    }
+
     @api
     refreshView(isAuthenticated) {
         this.authenticated = isAuthenticated;
@@ -86,19 +111,17 @@ export default class Header extends LightningElement {
         if (this.authenticated) {
             this.cache.notAuthenticatedLink.classList.add(this.classes.hide);
             this.cache.authenticatedLink.classList.remove(this.classes.hide);
+            this.refreshUserInfos();
             return;
         }
 
         this.cache.notAuthenticatedLink.classList.remove(this.classes.hide);
         this.cache.authenticatedLink.classList.add(this.classes.hide);
+        // Remove the user infos
+        this.userInfos = undefined;
     }
 
-    @api
-    setClientId(clientId) {
-        this.clientId = clientId;
-    }
-
-    get hasClientId() {
-        return this.clientId !== undefined;
+    get hasUserInfos() {
+        return this.userInfos !== undefined;
     }
 }

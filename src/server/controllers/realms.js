@@ -3,26 +3,6 @@
 const ocapi = require('../ocapi/helper');
 const config = require('../../config');
 
-/**
- * Get the Realm from the API based on the given {realmId}
- *
- * @param {Object} req The request
- * @param {String} realmId The realm ID
- * @param {String} extension The extension to get with the realm
- */
-async function getRealm(req, realmId, extension) {
-    if (!realmId) {
-        return undefined;
-    }
-
-    const result = await ocapi.call(
-        req,
-        'get',
-        `${config.ocapi.SANDBOXES_ENDPOINTS.API_BASE}/realms/${realmId}${extension}`
-    );
-    return result.data;
-}
-
 exports.list = async (req, res) => {
     const result = await ocapi.call(
         req,
@@ -30,8 +10,18 @@ exports.list = async (req, res) => {
         config.ocapi.SANDBOXES_ENDPOINTS.API_BASE + '/me'
     );
 
-    if (result?.data?.realms) {
-        let realms = result.data.realms;
+    // Return an error if the HTTP Status code is greater than 210
+    // Or if no data is sent
+    if (result.status > 210 || !result?.data?.data) {
+        res.json({
+            error: true,
+            status: result.status
+        });
+        return;
+    }
+
+    if (result?.data?.data?.realms) {
+        let realms = result.data.data.realms;
         realms = realms.map((realm) => ({
             id: realm
         }));
@@ -55,7 +45,7 @@ exports.list = async (req, res) => {
 };
 
 exports.get = async (req, res) => {
-    const realmId = req.query.realmId;
+    const realmId = req.params.realmId;
     const topic = req.query.topic;
     const from = req.query.from || '';
     const to = req.query.to || '';
@@ -67,7 +57,7 @@ exports.get = async (req, res) => {
         return;
     }
 
-    let extension = '?expand=configuration,usage';
+    let extension = '?expand=configuration';
     if (topic) {
         extension = '/' + topic;
         // for retrieving usage data, always retrieve full usage
@@ -76,20 +66,21 @@ exports.get = async (req, res) => {
         }
     }
 
-    const realm = getRealm(req, realmId, extension);
-    res.json({
-        error: typeof realm !== 'undefined',
-        data: realm
-    });
+    const result = await ocapi.call(
+        req,
+        'get',
+        `${config.ocapi.SANDBOXES_ENDPOINTS.API_BASE}/realms/${realmId}${extension}`
+    );
+
+    res.json(ocapi.prepareResponse(result));
 };
 
 exports.update = async (req, res) => {
-    const realmId = req.body.realmId;
+    const realmId = req.params.realmId;
     const maxSandboxTTL = req.body.maxSandboxTTL;
     const defaultSandboxTTL = req.body.defaultSandboxTTL;
-    const realm = getRealm(req, realmId, '');
 
-    if (!realm) {
+    if (!realmId || (!maxSandboxTTL && !defaultSandboxTTL)) {
         res.json({
             error: true
         });
@@ -115,8 +106,5 @@ exports.update = async (req, res) => {
         data
     );
 
-    res.json({
-        error: typeof result.data !== 'undefined',
-        data: result.data
-    });
+    res.json(ocapi.prepareResponse(result));
 };

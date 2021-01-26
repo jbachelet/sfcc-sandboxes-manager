@@ -4,7 +4,7 @@ import { httpGet, httpPost, httpDelete } from 'data/apiService';
 
 const URLS = {
     createSandbox: '/sandboxes',
-    getSandboxes: '/sandboxes?sortBy=instance&realmId={0}',
+    getSandboxes: '/sandboxes?sortBy=instance&includeDeleted=true&realmId={0}',
     getSandbox: '/sandboxes/{0}',
     getUsage: '/sandboxes/{0}/usage',
     getSettings: '/sandboxes/{0}/settings',

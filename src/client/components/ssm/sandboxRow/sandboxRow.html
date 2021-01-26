@@ -3,9 +3,6 @@
         <div class="slds-truncate" title={sandbox.id}>{sandbox.id}</div>
     </td>
     <td role="gridcell">
-        <div class="slds-truncate" title={sandbox.realm}>{sandbox.realm}</div>
-    </td>
-    <td role="gridcell">
         <div class="slds-truncate" title={sandbox.instance}>
             {sandbox.instance}
         </div>
@@ -14,7 +11,9 @@
         <div class="slds-truncate" title={createdAt}>{createdAt}</div>
     </td>
     <td role="gridcell">
-        <div title={sandbox.createdBy}>{sandbox.createdBy}</div>
+        <div class="slds-truncate" title={sandbox.createdBy}>
+            {sandbox.createdBy}
+        </div>
     </td>
     <td role="gridcell">
         <div class="slds-truncate" title={sandbox.state}>
@@ -52,12 +51,43 @@
                     <span class="slds-assistive-text">Open</span>
                 </a>
             </template>
+            <template if:false={canOpen}>
+                <a
+                    href={url}
+                    target="_blank"
+                    class="slds-button slds-button_icon slds-button_icon-border-filled slds-button_icon-small"
+                    title="Open"
+                    aria-disabled="true"
+                >
+                    <svg class="slds-button__icon" aria-hidden="true">
+                        <use
+                            xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#open"
+                        ></use>
+                    </svg>
+                    <span class="slds-assistive-text">Open</span>
+                </a>
+            </template>
 
             <template if:true={canRefresh}>
                 <button
                     class="slds-button slds-button_icon slds-button_icon-border-filled slds-button_icon-small"
                     title="Refresh"
                     onclick={handleRefresh}
+                >
+                    <svg class="slds-button__icon" aria-hidden="true">
+                        <use
+                            xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#refresh"
+                        ></use>
+                    </svg>
+                    <span class="slds-assistive-text">Refresh</span>
+                </button>
+            </template>
+            <template if:false={canRefresh}>
+                <button
+                    class="slds-button slds-button_icon slds-button_icon-border-filled slds-button_icon-small"
+                    title="Refresh"
+                    onclick={handleRefresh}
+                    disabled
                 >
                     <svg class="slds-button__icon" aria-hidden="true">
                         <use
@@ -118,6 +148,21 @@
                     class="slds-button slds-button_icon slds-button_icon-error slds-button_icon-border-filled slds-button_icon-small"
                     title="Delete"
                     onclick={handleDelete}
+                >
+                    <svg class="slds-button__icon" aria-hidden="true">
+                        <use
+                            xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#delete"
+                        ></use>
+                    </svg>
+                    <span class="slds-assistive-text">Delete</span>
+                </button>
+            </template>
+            <template if:false={canDelete}>
+                <button
+                    class="slds-button slds-button_icon slds-button_icon-error slds-button_icon-border-filled slds-button_icon-small"
+                    title="Delete"
+                    onclick={handleDelete}
+                    disabled
                 >
                     <svg class="slds-button__icon" aria-hidden="true">
                         <use

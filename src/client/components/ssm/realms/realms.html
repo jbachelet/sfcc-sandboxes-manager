@@ -42,7 +42,7 @@
                                     xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#refresh"
                                 ></use>
                             </svg>
-                            Refresh
+                            Refresh realms list
                         </button>
                     </div>
                 </header>
@@ -82,12 +82,29 @@
                                 for:index="index"
                             >
                                 <ssm-realm-content
+                                    userinfos={userinfos}
                                     realm={realm}
                                     index={index}
                                     key={realm.id}
+                                    onopenrealmpanel={handleOpenRealmPanel}
+                                    onchangelabel={handleOpenChangeRealmLabelModal}
                                 ></ssm-realm-content>
                             </template>
                         </div>
+
+                        <!-- Realm configuration panels -->
+                        <template for:each={realms} for:item="realm">
+                            <ssm-realm-panel
+                                realmid={realm.id}
+                                key={realm.id}
+                                onapplyconfiguration={handleApplyRealmConfiguration}
+                            ></ssm-realm-panel>
+                        </template>
+
+                        <!-- Realm Label Modal -->
+                        <ssm-set-realm-label-modal
+                            onsetrealmlabel={handleSetRealmLabel}
+                        ></ssm-set-realm-label-modal>
                     </template>
 
                     <template if:false={hasRealms}>

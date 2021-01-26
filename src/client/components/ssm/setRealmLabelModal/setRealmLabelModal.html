@@ -1,0 +1,180 @@
+<template>
+    <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="setrealmlabel-modal-header"
+        aria-modal="true"
+        aria-describedby="setrealmlabel-modal-content"
+        class="slds-modal"
+        data-js-modal
+    >
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <button
+                    class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                    title="Close"
+                    onclick={handleClose}
+                >
+                    <svg
+                        class="slds-button__icon slds-button__icon_large"
+                        aria-hidden="true"
+                    >
+                        <use
+                            xlink:href="/resources/slds/icons/utility-sprite/svg/symbols.svg#close"
+                        ></use>
+                    </svg>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2
+                    id="setrealmlabel-modal-header"
+                    class="slds-modal__title slds-hyphenate"
+                >
+                    Set Realm Label
+                </h2>
+            </header>
+            <div
+                class="slds-modal__content slds-p-around_medium"
+                id="setrealmlabel-modal-content"
+            >
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="realm-id-input"
+                        >Realm Label</label
+                    >
+                    <div class="slds-form-element__control">
+                        <input
+                            type="text"
+                            value={realmLabel}
+                            id="realm-id-input"
+                            class="slds-input"
+                            data-js-realm-label
+                        />
+                        <div
+                            class="slds-form-element__help"
+                            id="error-message-unique-id"
+                        >
+                            This value won't affect anything on the realm, the
+                            label is only used for presentation purpose within
+                            this tool.
+                        </div>
+                    </div>
+                </div>
+                <fieldset class="slds-form-element">
+                    <legend
+                        class="slds-form-element__legend slds-form-element__label"
+                    >
+                        Label style
+                    </legend>
+                    <div class="slds-form-element__control">
+                        <div class="slds-radio_button-group">
+                            <span class="slds-button slds-radio_button">
+                                <input
+                                    type="radio"
+                                    name="label-style"
+                                    id="label-style-default"
+                                    value="slds-badge"
+                                    checked={styleDefaultChecked}
+                                />
+                                <label
+                                    class="slds-radio_button__label"
+                                    for="label-style-default"
+                                >
+                                    <span class="slds-radio_faux">Default</span>
+                                </label>
+                            </span>
+                            <span class="slds-button slds-radio_button">
+                                <input
+                                    type="radio"
+                                    name="label-style"
+                                    id="label-style-dark"
+                                    value="slds-badge slds-badge_inverse"
+                                    checked={styleDarkChecked}
+                                />
+                                <label
+                                    class="slds-radio_button__label"
+                                    for="label-style-dark"
+                                >
+                                    <span class="slds-radio_faux">Dark</span>
+                                </label>
+                            </span>
+                            <span class="slds-button slds-radio_button">
+                                <input
+                                    type="radio"
+                                    name="label-style"
+                                    id="label-style-light"
+                                    value="slds-badge slds-badge_lightest"
+                                    checked={styleLightChecked}
+                                />
+                                <label
+                                    class="slds-radio_button__label"
+                                    for="label-style-light"
+                                >
+                                    <span class="slds-radio_faux">Light</span>
+                                </label>
+                            </span>
+                            <span class="slds-button slds-radio_button">
+                                <input
+                                    type="radio"
+                                    name="label-style"
+                                    id="label-style-success"
+                                    value="slds-badge slds-theme_success"
+                                    checked={styleSuccessChecked}
+                                />
+                                <label
+                                    class="slds-radio_button__label"
+                                    for="label-style-success"
+                                >
+                                    <span class="slds-radio_faux">Green</span>
+                                </label>
+                            </span>
+                            <span class="slds-button slds-radio_button">
+                                <input
+                                    type="radio"
+                                    name="label-style"
+                                    id="label-style-warning"
+                                    value="slds-badge slds-theme_warning"
+                                    checked={styleWarningChecked}
+                                />
+                                <label
+                                    class="slds-radio_button__label"
+                                    for="label-style-warning"
+                                >
+                                    <span class="slds-radio_faux">Yellow</span>
+                                </label>
+                            </span>
+                            <span class="slds-button slds-radio_button">
+                                <input
+                                    type="radio"
+                                    name="label-style"
+                                    id="label-style-error"
+                                    value="slds-badge slds-theme_error"
+                                    checked={styleErrorChecked}
+                                />
+                                <label
+                                    class="slds-radio_button__label"
+                                    for="label-style-error"
+                                >
+                                    <span class="slds-radio_faux">Red</span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <footer class="slds-modal__footer">
+                <button
+                    class="slds-button slds-button_neutral"
+                    onclick={handleClose}
+                >
+                    Cancel
+                </button>
+                <button
+                    class="slds-button slds-button_brand"
+                    onclick={handleConfirm}
+                >
+                    Set the label
+                </button>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop" data-js-background></div>
+</template>

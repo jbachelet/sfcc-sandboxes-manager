@@ -7,6 +7,7 @@ import {
     runOperation,
     deleteSandbox
 } from 'data/sandboxesService';
+import { handleResponse, displayToast } from 'helpers/ui';
 
 const PULL_TIMEOUT = 3000;
 const MAX_CONCURRENT_PULL = 2;
@@ -14,10 +15,15 @@ const MAX_CONCURRENT_PULL = 2;
 export default class Sandboxes extends LightningElement {
     selectors = {
         sandboxesCount: '[data-js-sandboxes-count]',
-        sandboxesPanels: 'ssm-sandbox-panel'
+        sandboxesPanels: 'ssm-sandbox-panel',
+        sandboxesRows: 'ssm-sandbox-row',
+        sandboxesFilterOnlyMine: '[ data-js-sandbox-filter-onlymine]',
+        sandboxesFilterIncludeDeleted:
+            '[ data-js-sandbox-filter-include-deleted]'
     };
     cache = {};
     @api realmid;
+    @api userinfos;
     @track sandboxes = [];
     @track loading = false;
     @track sandboxIdToDelete = undefined;
@@ -25,12 +31,16 @@ export default class Sandboxes extends LightningElement {
     activePull = 0;
 
     renderedCallback() {
-        if (this.cache.sandboxesCount) {
-            return;
-        }
-
         this.cache.sandboxesCount = this.template.querySelector(
             this.selectors.sandboxesCount
+        );
+
+        this.cache.sandboxesFilterOnlyMine = this.template.querySelector(
+            this.selectors.sandboxesFilterOnlyMine
+        );
+
+        this.cache.sandboxesFilterIncludeDeleted = this.template.querySelector(
+            this.selectors.sandboxesFilterIncludeDeleted
         );
     }
 
@@ -51,20 +61,14 @@ export default class Sandboxes extends LightningElement {
         this.sandboxes[sandboxIdx].hasPendingOperation = true;
 
         // Refresh the sandbox
-        getSandbox(sandboxId).then((sandboxResult) => {
-            if (sandboxResult.error || !sandboxResult.data) {
+        getSandbox(sandboxId).then((result) => {
+            if (!handleResponse(this, result)) {
                 // Release the flag
                 this.sandboxes[sandboxIdx].hasPendingOperation = false;
-                this.dispatchEvent(
-                    new CustomEvent('refreshauth', {
-                        bubbles: true,
-                        composed: true
-                    })
-                );
                 return;
             }
 
-            this.sandboxes[sandboxIdx] = sandboxResult.data;
+            this.sandboxes[sandboxIdx] = result.data;
         });
     }
 
@@ -81,28 +85,16 @@ export default class Sandboxes extends LightningElement {
         this.sandboxes[sandboxIdx].state = 'pending';
 
         runOperation(sandboxId, operation).then((result) => {
-            if (result.error || !result.data) {
+            if (!handleResponse(this, result)) {
                 // Release the flag
                 this.sandboxes[sandboxIdx].hasPendingOperation = false;
-                this.dispatchEvent(
-                    new CustomEvent('refreshauth', {
-                        bubbles: true,
-                        composed: true
-                    })
-                );
                 return;
             }
 
             // Display toast for success
-            this.dispatchEvent(
-                new CustomEvent('opentoast', {
-                    bubbles: true,
-                    composed: true,
-                    detail: {
-                        title: 'The operation has been started.',
-                        type: 'success'
-                    }
-                })
+            displayToast(
+                this,
+                `The "${operation}" operation has been started.`
             );
 
             // Put the sandbox state as pending
@@ -126,33 +118,18 @@ export default class Sandboxes extends LightningElement {
         );
 
         deleteSandbox(this.sandboxIdToDelete).then((result) => {
-            if (result.error) {
-                // Remove the sandbox ID, meaning the prompt will be hidden
-                this.sandboxIdToDelete = undefined;
-                this.dispatchEvent(
-                    new CustomEvent('refreshauth', {
-                        bubbles: true,
-                        composed: true
-                    })
-                );
+            // Remove the sandbox ID, meaning the prompt will be hidden
+            this.sandboxIdToDelete = undefined;
+
+            if (!handleResponse(this, result)) {
                 return;
             }
 
             // Display toast for success
-            this.dispatchEvent(
-                new CustomEvent('opentoast', {
-                    bubbles: true,
-                    composed: true,
-                    detail: {
-                        title:
-                            'The sandbox deletion operation has been started.',
-                        type: 'success'
-                    }
-                })
+            displayToast(
+                this,
+                'The sandbox deletion operation has been started.'
             );
-
-            // Remove the sandbox ID, meaning the prompt will be hidden
-            this.sandboxIdToDelete = undefined;
 
             // Put the sandbox state as pending
             if (result.data.operationState === 'pending') {
@@ -184,14 +161,10 @@ export default class Sandboxes extends LightningElement {
         this.activePull++;
         getOperations(sandboxId, operation).then((operationsResult) => {
             this.activePull--;
-            if (
-                operationsResult.error ||
-                !operationsResult.data ||
-                operationsResult.data.length === 0
-            ) {
+
+            if (!handleResponse(this, operationsResult)) {
                 // Release the flag
                 this.sandboxes[sandboxIdx].hasPendingOperation = false;
-                // TODO
                 return;
             }
 
@@ -212,10 +185,9 @@ export default class Sandboxes extends LightningElement {
 
             // The operation is finished, let's retrieve the latest sandbox state
             getSandbox(sandboxId).then((sandboxResult) => {
-                if (sandboxResult.error || !sandboxResult.data) {
+                if (!handleResponse(this, sandboxResult)) {
                     // Release the flag
                     this.sandboxes[sandboxIdx].hasPendingOperation = false;
-                    // TODO
                     return;
                 }
 
@@ -238,33 +210,57 @@ export default class Sandboxes extends LightningElement {
             e.detail.ocapiSettings,
             e.detail.webdavSettings
         ).then((result) => {
-            if (result.error) {
-                this.loading = false;
-                this.dispatchEvent(
-                    new CustomEvent('refreshauth', {
-                        bubbles: true,
-                        composed: true
-                    })
-                );
+            this.loading = false;
+
+            if (!handleResponse(this, result)) {
                 return;
             }
 
-            this.loading = false;
-
             // Display toast for success
-            this.dispatchEvent(
-                new CustomEvent('opentoast', {
-                    bubbles: true,
-                    composed: true,
-                    detail: {
-                        title:
-                            'The sandbox creation operation has been started.',
-                        type: 'success'
-                    }
-                })
+            displayToast(
+                this,
+                'The sandbox creation operation has been started.'
             );
             this.refreshView(true);
         });
+    }
+
+    handleFilterOnlyMineChange() {
+        this.filterSandboxList();
+    }
+
+    handleFilterIncludeDeletedChange() {
+        this.filterSandboxList();
+    }
+
+    filterSandboxList() {
+        const isOnlyMineCheked = this.cache.sandboxesFilterOnlyMine.checked;
+        const isIncludeDeletedCheked = this.cache.sandboxesFilterIncludeDeleted
+            .checked;
+        const sandboxRows = Array.from(
+            this.template.querySelectorAll(this.selectors.sandboxesRows)
+        );
+
+        // Hide all rows by default
+        sandboxRows.forEach((sandboxRow) => sandboxRow.toggleRow(false));
+
+        // Then show only the ones that we need to show
+        sandboxRows
+            .filter((sandboxRow) => {
+                let showRow = true;
+
+                if (isOnlyMineCheked) {
+                    showRow =
+                        sandboxRow.sandbox.createdBy === this.userinfos.id;
+                }
+
+                if (!isIncludeDeletedCheked) {
+                    showRow = showRow && sandboxRow.sandbox.state !== 'deleted';
+                }
+
+                return showRow;
+            })
+            .forEach((sandboxRow) => sandboxRow.toggleRow(true));
     }
 
     @api
@@ -277,14 +273,9 @@ export default class Sandboxes extends LightningElement {
         this.loading = true;
         getSandboxes(this.realmid)
             .then((result) => {
-                if (result.error) {
-                    this.loading = false;
-                    this.dispatchEvent(
-                        new CustomEvent('refreshauth', {
-                            bubbles: true,
-                            composed: true
-                        })
-                    );
+                this.loading = false;
+
+                if (!handleResponse(this, result)) {
                     return;
                 }
 
@@ -294,7 +285,6 @@ export default class Sandboxes extends LightningElement {
                     return sandbox;
                 });
 
-                this.loading = false;
                 this.sandboxes = result.data;
                 this.cache.sandboxesCount.innerText = this.sandboxes.length;
                 this.sandboxesFetched = true;
@@ -307,6 +297,8 @@ export default class Sandboxes extends LightningElement {
                         this.refreshSandboxRow(sandbox.id);
                     }
                 });
+
+                this.filterSandboxList();
             });
     }
 
@@ -320,5 +312,9 @@ export default class Sandboxes extends LightningElement {
 
     get showDeletePrompt() {
         return this.sandboxIdToDelete !== undefined;
+    }
+
+    get hasUserInfos() {
+        return this.userinfos !== undefined;
     }
 }

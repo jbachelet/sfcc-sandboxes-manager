@@ -100,14 +100,30 @@
                             aria-labelledby="sandbox-panel-tab-1__item"
                             data-js-tab-content
                         >
-                            <p class="slds-text-title_caps">Details:</p>
+                            <p class="slds-text-title_caps slds-m-bottom_small">
+                                Details:
+                            </p>
                             <p>Realm: {sandbox.realm}</p>
                             <p>Sandbox ID: {sandbox.id}</p>
                             <p>Instance: {sandbox.instance}</p>
                             <p>Created at: {createdAt}</p>
                             <p>Created by: {sandbox.createdBy}</p>
+                            <template if:true={hasEOL}>
+                                <p>End of life: {endOfLife}</p>
+                            </template>
+                            <template if:true={hasDeletedDetails}>
+                                <p>Deleted at: {deletedAt}</p>
+                                <p>Deleted by: {sandbox.deletedBy}</p>
+                            </template>
+                            <p class="slds-text-title_caps slds-m-bottom_small">
+                                Versions:
+                            </p>
+                            <p>App: {sandbox.version.app}</p>
+                            <p>Web: {sandbox.versions.web}</p>
                             <hr />
-                            <p class="slds-text-title_caps">Links:</p>
+                            <p class="slds-text-title_caps slds-m-bottom_small">
+                                Links:
+                            </p>
                             <ul>
                                 <li>
                                     <a href={sandbox.links.bm} target="_blank"
@@ -139,24 +155,34 @@
                                     >
                                 </li>
                             </ul>
-                            <hr />
-                            <p class="slds-text-title_caps">Storage:</p>
-                            <ul>
-                                <li>
-                                    Shared data:
-                                    {sandbox.storage.sharedata.spaceUsed} MB on
-                                    {sandbox.storage.sharedata.spaceTotal} MB
-                                    ({sandbox.storage.sharedata.percentageUsed}%
-                                    used)
-                                </li>
-                                <li>
-                                    Realm data:
-                                    {sandbox.storage.realmdata.spaceUsed} MB on
-                                    {sandbox.storage.realmdata.spaceTotal} MB
-                                    ({sandbox.storage.realmdata.percentageUsed}%
-                                    used)
-                                </li>
-                            </ul>
+                            <template if:true={hasSandboxStorageLoaded}>
+                                <hr />
+                                <p
+                                    class="slds-text-title_caps slds-m-bottom_small"
+                                >
+                                    Storage:
+                                </p>
+                                <ul>
+                                    <li>
+                                        Shared data:
+                                        {sandbox.storage.sharedata.spaceUsed} MB
+                                        on
+                                        {sandbox.storage.sharedata.spaceTotal}
+                                        MB
+                                        ({sandbox.storage.sharedata.percentageUsed}%
+                                        used)
+                                    </li>
+                                    <li>
+                                        Realm data:
+                                        {sandbox.storage.realmdata.spaceUsed} MB
+                                        on
+                                        {sandbox.storage.realmdata.spaceTotal}
+                                        MB
+                                        ({sandbox.storage.realmdata.percentageUsed}%
+                                        used)
+                                    </li>
+                                </ul>
+                            </template>
                         </div>
                         <div
                             id="sandbox-panel-tab-2"
@@ -252,7 +278,9 @@
                                         </div>
                                     </fieldset>
                                     <hr />
-                                    <p class="slds-text-title_caps">
+                                    <p
+                                        class="slds-text-title_caps slds-m-bottom_small"
+                                    >
                                         Usage summary:
                                     </p>
                                     <p>
@@ -265,10 +293,14 @@
                                         {daysDown} days down)
                                     </p>
                                     <hr />
-                                    <p class="slds-text-title_caps">
+                                    <p
+                                        class="slds-text-title_caps slds-m-bottom_small"
+                                    >
                                         Usage details:
                                     </p>
-                                    <p>// TODO: history graph</p>
+                                    <p>
+                                        You'll see a graph in the future release
+                                    </p>
                                 </template>
                             </template>
                         </div>
@@ -298,6 +330,7 @@
                                         data-js-settings-ocapi
                                         rows="10"
                                         class="slds-textarea"
+                                        readonly
                                     >
 {settingsOcapi}</textarea
                                     >
@@ -307,6 +340,7 @@
                                         data-js-settings-webdav
                                         rows="10"
                                         class="slds-textarea"
+                                        readonly
                                     >
 {settingsWebdav}</textarea
                                     >

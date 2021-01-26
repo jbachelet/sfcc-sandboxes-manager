@@ -3,6 +3,7 @@
         onopenwelcomemodal={handleOpenWelcomeModal}
         onopenauthmodal={handleOpenAuthModal}
         onlogout={handleLogout}
+        onuserinfos={handleUserInfos}
     ></ssm-header>
 
     <!-- Toast -->
@@ -12,6 +13,7 @@
         <div class="slds-col">
             <!-- Realms list component -->
             <ssm-realms
+                userinfos={userInfos}
                 onrefreshauth={handleRefreshAuth}
                 onopentoast={handleOpenToast}
             ></ssm-realms>

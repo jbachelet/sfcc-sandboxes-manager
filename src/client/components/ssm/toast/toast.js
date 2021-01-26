@@ -13,8 +13,13 @@ export default class Toast extends LightningElement {
     cache = {};
     @api title;
     @api type;
+    rendered = false;
 
     renderedCallback() {
+        if (this.cache.toast) {
+            return;
+        }
+
         this.cache.toast = this.template.querySelector(this.selectors.toast);
     }
 

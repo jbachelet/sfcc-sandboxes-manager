@@ -16,6 +16,10 @@ export default class WelcomeModal extends LightningElement {
     cache = {};
 
     renderedCallback() {
+        if (this.cache.modal) {
+            return;
+        }
+
         this.cache.modal = this.template.querySelector(this.selectors.modal);
         this.cache.background = this.template.querySelector(
             this.selectors.background

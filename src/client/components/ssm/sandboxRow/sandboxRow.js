@@ -1,6 +1,9 @@
 import { LightningElement, api } from 'lwc';
 
 export default class SandboxRow extends LightningElement {
+    classes = {
+        hide: 'slds-hide'
+    };
     @api sandbox;
 
     handleRunOperation(e) {
@@ -42,6 +45,16 @@ export default class SandboxRow extends LightningElement {
                 }
             })
         );
+    }
+
+    @api
+    toggleRow(isOpened) {
+        if (isOpened) {
+            this.template.host.classList.remove(this.classes.hide);
+            return;
+        }
+
+        this.template.host.classList.add(this.classes.hide);
     }
 
     get id() {

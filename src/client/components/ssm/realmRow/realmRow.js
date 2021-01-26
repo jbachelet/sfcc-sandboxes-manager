@@ -34,4 +34,12 @@ export default class RealmRow extends LightningElement {
             this.active ? 'slds-is-active' : ''
         }`;
     }
+
+    get hasRealmLabel() {
+        return this.realm.label && this.realm.label.length > 0;
+    }
+
+    get labelStyle() {
+        return this.realm.labelStyle || 'slds-badge slds-badge_inverse';
+    }
 }

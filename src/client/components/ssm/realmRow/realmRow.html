@@ -26,7 +26,11 @@
                 </span>
             </span>
             <span class="slds-truncate" title={realm.id}>{realm.id}</span>
-            <span class="slds-vertical-tabs__right-icon"></span>
+            <template if:true={hasRealmLabel}>
+                <span class="slds-vertical-tabs__right-icon">
+                    <span class={labelStyle}>{realm.label}</span>
+                </span>
+            </template>
         </a>
     </li>
 </template>

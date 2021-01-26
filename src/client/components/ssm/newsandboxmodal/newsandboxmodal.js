@@ -49,8 +49,14 @@ export default class NewSandboxModal extends LightningElement {
         null,
         4
     );
+    rendered = false;
 
     renderedCallback() {
+        if (this.rendered) {
+            return;
+        }
+
+        this.rendered = true;
         this.cache.modal = this.template.querySelector(this.selectors.modal);
         this.cache.background = this.template.querySelector(
             this.selectors.background

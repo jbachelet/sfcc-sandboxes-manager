@@ -51,6 +51,7 @@ app.get('/', require('./controllers/index').index);
 app.use('/auth', require('./routes/authentication'));
 app.use('/sandboxes', require('./routes/sandboxes'));
 app.use('/realms', require('./routes/realms'));
+app.use('/me', require('./routes/me'));
 
 app.listen(PORT, () =>
     console.log(

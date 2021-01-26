@@ -50,7 +50,15 @@ module.exports.obtainToken = async (
     }
 
     try {
+        if (process.env.DEBUG) {
+            console.log('Auth request', options);
+        }
         const response = await axios(options);
+
+        if (process.env.DEBUG) {
+            console.log('Auth response', response.status, response.data);
+        }
+
         if (!response.statusText === 'OK' || response.status !== 200) {
             console.error(`Failed to obtain a token: ${response.data}`);
             return undefined;
