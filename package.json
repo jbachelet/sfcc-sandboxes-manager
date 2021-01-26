@@ -65,7 +65,7 @@
     },
     "repository": "jbachelet/sfcc-sandboxes-manager",
     "scripts": {
-        "build": "lwc-services build -m production -w webpack.config.js",
+        "build": "lwc-services build -m production -w webpack.config.js && npm run renameSlds",
         "build:development": "lwc-services build -w webpack.config.js && npm run renameSlds",
         "renameSlds": "node ./build/renameSldsStyles.js",
         "lint": "eslint ./src/**/*.js",
