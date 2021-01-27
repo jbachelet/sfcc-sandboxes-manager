@@ -72,17 +72,7 @@ export default class Header extends LightningElement {
 
     onClickLogoutLink(e) {
         e.preventDefault();
-        logout().then((result) => {
-            this.authenticated = result.authenticated;
-            this.refreshView(this.authenticated);
-            this.dispatchEvent(
-                new CustomEvent('logout', {
-                    detail: {
-                        authenticated: this.authenticated
-                    }
-                })
-            );
-        });
+        this.handleLogout();
     }
 
     refreshUserInfos() {
@@ -98,6 +88,21 @@ export default class Header extends LightningElement {
                 new CustomEvent('userinfos', {
                     detail: {
                         userInfos: this.userInfos
+                    }
+                })
+            );
+        });
+    }
+
+    @api
+    handleLogout() {
+        logout().then((result) => {
+            this.authenticated = result.authenticated;
+            this.refreshView(this.authenticated);
+            this.dispatchEvent(
+                new CustomEvent('logout', {
+                    detail: {
+                        authenticated: this.authenticated
                     }
                 })
             );

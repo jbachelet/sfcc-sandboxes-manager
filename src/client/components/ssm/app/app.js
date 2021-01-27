@@ -2,11 +2,19 @@ import { LightningElement, track } from 'lwc';
 import { getDetails } from 'data/authService';
 
 export default class App extends LightningElement {
+    selectors = {
+        header: 'ssm-header',
+        toast: 'ssm-toast',
+        welcome: 'ssm-welcomemodal',
+        auth: 'ssm-authmodal',
+        realms: 'ssm-realms'
+    };
     authDetails = {};
     @track userInfos = undefined;
     toastTitle = undefined;
     toastType = 'success';
     rendered = false;
+    authRefreshed = false;
 
     renderedCallback() {
         if (this.rendered) {
@@ -18,7 +26,19 @@ export default class App extends LightningElement {
     }
 
     handleRefreshAuth() {
+        if (this.authRefreshed) {
+            this.toastTitle =
+                'Failed to authenticate you. Please ensure you properly configured your API Client.';
+            this.toastType = 'error';
+            this.template.querySelector(this.selectors.toast).toggle(true);
+            this.template.querySelector(this.selectors.header).handleLogout();
+            return;
+        }
+
         getDetails().then((result) => {
+            // Set the refreshed flag to true if the authentication failed, so that next time we refresh we block the loop and display an error
+            this.authRefreshed = !result.authenticated;
+
             this.authDetails = result;
             this.refreshSubComponents();
         });
@@ -27,15 +47,15 @@ export default class App extends LightningElement {
     handleOpenToast(e) {
         this.toastTitle = e.detail.title;
         this.toastType = e.detail.type;
-        this.template.querySelector('ssm-toast').toggle(true);
+        this.template.querySelector(this.selectors.toast).toggle(true);
     }
 
     handleOpenWelcomeModal() {
-        this.template.querySelector('ssm-welcomemodal').toggleModal(true);
+        this.template.querySelector(this.selectors.welcome).toggleModal(true);
     }
 
     handleOpenAuthModal() {
-        this.template.querySelector('ssm-authmodal').toggleModal(true);
+        this.template.querySelector(this.selectors.auth).toggleModal(true);
     }
 
     handleLogout(e) {
@@ -55,19 +75,19 @@ export default class App extends LightningElement {
     refreshSubComponents() {
         // Refresh the header
         this.template
-            .querySelector('ssm-header')
+            .querySelector(this.selectors.header)
             .refreshView(this.authDetails.authenticated);
         // Refresh the Welcome modal
         this.template
-            .querySelector('ssm-welcomemodal')
+            .querySelector(this.selectors.welcome)
             .refreshView(this.authDetails.host);
         // Render or not the auth modal automatically
         this.template
-            .querySelector('ssm-authmodal')
+            .querySelector(this.selectors.auth)
             .toggleModal(!this.authDetails.authenticated);
         // Display authenticated components
         this.template
-            .querySelector('ssm-realms')
+            .querySelector(this.selectors.realms)
             .refreshView(this.authDetails.authenticated);
     }
 }

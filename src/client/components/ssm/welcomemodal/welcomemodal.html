@@ -59,8 +59,22 @@
                                     </p>
                                     <p>
                                         Please ensure to put the following in
-                                        the configuration:
+                                        the configuration (more infos on how to
+                                        setup the Client API
+                                        <a
+                                            href="https://documentation.b2c.commercecloud.salesforce.com/DOC2/index.jsp?topic=%2Fcom.demandware.dochelp%2Fcontent%2Fb2c_commerce%2Ftopics%2Fsandboxes%2Fb2c_api_client_id.html"
+                                            target="_blank"
+                                            >here</a
+                                        >):
                                     </p>
+                                    <p class="slds-text-align_left">
+                                        Default scopes and Allowed scopes:
+                                    </p>
+                                    <ul class="slds-text-align_left">
+                                        <li>roles</li>
+                                        <li>tenantFilter</li>
+                                        <li>profile</li>
+                                    </ul>
                                     <p class="slds-text-align_left">
                                         Redirect URI:&nbsp;<em
                                             >{redirectURI}</em
@@ -71,7 +85,7 @@
                                         <em>client_secret_post</em>
                                     </p>
                                     <p class="slds-text-align_left">
-                                        Access Token Format:&nbsp;<em>UUID</em>
+                                        Access Token Format:&nbsp;<em>JWT</em>
                                     </p>
                                 </div>
                                 <div class="slds-welcome-mat__info-actions">
