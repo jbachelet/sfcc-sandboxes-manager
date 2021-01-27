@@ -11,36 +11,31 @@ import { handleResponse, displayToast } from 'helpers/ui';
 
 const PULL_TIMEOUT = 3000;
 const MAX_CONCURRENT_PULL = 2;
+const PAGE_SIZE = 25;
 
 export default class Sandboxes extends LightningElement {
     selectors = {
-        sandboxesCount: '[data-js-sandboxes-count]',
         sandboxesPanels: 'ssm-sandbox-panel',
         sandboxesRows: 'ssm-sandbox-row',
-        sandboxesFilterOnlyMine: '[ data-js-sandbox-filter-onlymine]',
-        sandboxesFilterIncludeDeleted:
-            '[ data-js-sandbox-filter-include-deleted]'
+        sandboxesFilterOnlyMine: '[ data-js-sandbox-filter-onlymine]'
     };
     cache = {};
     @api realmid;
     @api userinfos;
     @track sandboxes = [];
+    // This array is used when the sandboxes list is larger than the PAGE_SIZE limit
+    // It stores all the sandboxes, and server as a storage so that when the user clicks on the "load more" button, instead of doing another API call
+    // The component just grabs more sandboxes from this array
+    allSandboxes = [];
+    page = 0;
     @track loading = false;
     @track sandboxIdToDelete = undefined;
     sandboxesFetched = false;
     activePull = 0;
 
     renderedCallback() {
-        this.cache.sandboxesCount = this.template.querySelector(
-            this.selectors.sandboxesCount
-        );
-
         this.cache.sandboxesFilterOnlyMine = this.template.querySelector(
             this.selectors.sandboxesFilterOnlyMine
-        );
-
-        this.cache.sandboxesFilterIncludeDeleted = this.template.querySelector(
-            this.selectors.sandboxesFilterIncludeDeleted
         );
     }
 
@@ -233,10 +228,28 @@ export default class Sandboxes extends LightningElement {
         this.filterSandboxList();
     }
 
+    handleLoadMoreSandboxes() {
+        this.loadMoreSandboxes();
+    }
+
+    loadMoreSandboxes() {
+        // If there is no more sandboxes to grab, abort
+        if (this.allSandboxes.length === 0) {
+            return;
+        }
+
+        // Load the next page sandboxes
+        this.sandboxes = this.sandboxes.concat(
+            this.allSandboxes.slice(0, PAGE_SIZE)
+        );
+        // Then remove them from the all sandboxes array
+        this.allSandboxes.splice(0, PAGE_SIZE);
+        // Move to next page
+        this.page += 1;
+    }
+
     filterSandboxList() {
         const isOnlyMineCheked = this.cache.sandboxesFilterOnlyMine.checked;
-        const isIncludeDeletedCheked = this.cache.sandboxesFilterIncludeDeleted
-            .checked;
         const sandboxRows = Array.from(
             this.template.querySelectorAll(this.selectors.sandboxesRows)
         );
@@ -252,10 +265,6 @@ export default class Sandboxes extends LightningElement {
                 if (isOnlyMineCheked) {
                     showRow =
                         sandboxRow.sandbox.createdBy === this.userinfos.id;
-                }
-
-                if (!isIncludeDeletedCheked) {
-                    showRow = showRow && sandboxRow.sandbox.state !== 'deleted';
                 }
 
                 return showRow;
@@ -285,8 +294,8 @@ export default class Sandboxes extends LightningElement {
                     return sandbox;
                 });
 
-                this.sandboxes = result.data;
-                this.cache.sandboxesCount.innerText = this.sandboxes.length;
+                this.allSandboxes = result.data;
+                this.loadMoreSandboxes();
                 this.sandboxesFetched = true;
             })
             .then(() => {
@@ -306,6 +315,10 @@ export default class Sandboxes extends LightningElement {
         return this.sandboxes && this.sandboxes.length > 0;
     }
 
+    get sandboxesCount() {
+        return this.sandboxes.length;
+    }
+
     get isLoadingData() {
         return this.loading === true;
     }
@@ -316,5 +329,13 @@ export default class Sandboxes extends LightningElement {
 
     get hasUserInfos() {
         return this.userinfos !== undefined;
+    }
+
+    get moreSandboxesToShow() {
+        return this.allSandboxes.length > 0;
+    }
+
+    get remainingSandboxes() {
+        return this.allSandboxes.length - this.sandboxes.length;
     }
 }

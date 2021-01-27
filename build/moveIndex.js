@@ -3,9 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const FOLDER = './dist/resources/slds/styles';
-const TO_BE_REPLACED = /\/assets\//g;
-const VALUE_TO_APPLY = '/resources/slds/';
+const FOLDER = './dist';
 
 function readFiles(dir, processFile) {
     // read directory
@@ -35,19 +33,17 @@ function readFiles(dir, processFile) {
 
 const run = () => {
     readFiles(path.resolve(FOLDER), (filepath) => {
-        console.info(`Renaming values in file ${filepath}`);
-        fs.readFile(filepath, 'utf8', (err, data) => {
+        const filename = filepath.split('/').pop();
+        if (filename !== 'index.html') {
+            return;
+        }
+
+        fs.rename(filepath, path.resolve(FOLDER, 'page.html'), (err) => {
             if (err) {
                 throw err;
             }
 
-            const result = data.replace(TO_BE_REPLACED, VALUE_TO_APPLY);
-
-            fs.writeFile(filepath, result, 'utf8', (error) => {
-                if (err) {
-                    throw error;
-                }
-            });
+            console.log('Index file renamed.');
         });
     });
 };

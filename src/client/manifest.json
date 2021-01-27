@@ -1,9 +1,9 @@
 {
-    "name": "My LWC App",
+    "name": "Salesforce On-Demand Sandboxes Manager",
     "theme_color": "#2196f3",
-    "background_color": "#2196f3",
+    "background_color": "#ffffff",
     "display": "standalone",
-    "short_name": "LWC",
+    "short_name": "SFCC SB Mgr",
     "Scope": "/",
     "start_url": "/",
     "icons": [

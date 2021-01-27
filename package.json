@@ -65,9 +65,10 @@
     },
     "repository": "jbachelet/sfcc-sandboxes-manager",
     "scripts": {
-        "build": "lwc-services build -m production -w webpack.config.js && npm run renameSlds",
-        "build:development": "lwc-services build -w webpack.config.js && npm run renameSlds",
+        "build": "lwc-services build -m production -w webpack.config.js && npm run renameSlds && npm run moveIndex",
+        "build:development": "lwc-services build -w webpack.config.js && npm run renameSlds && npm run moveIndex",
         "renameSlds": "node ./build/renameSldsStyles.js",
+        "moveIndex": "node ./build/moveIndex.js",
         "lint": "eslint ./src/**/*.js",
         "prettier": "prettier --write \"**/*.{css,html,js,json,md,ts,yaml,yml}\"",
         "prettier:verify": "prettier --list-different \"**/*.{css,html,js,json,md,ts,yaml,yml}\"",
