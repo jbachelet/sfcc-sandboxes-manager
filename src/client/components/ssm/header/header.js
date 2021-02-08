@@ -59,7 +59,10 @@ export default class Header extends LightningElement {
 
     onClickClientID(e) {
         e.preventDefault();
-        navigator.clipboard.writeText(this.clientId);
+        if (!this.userInfos) {
+            return;
+        }
+        navigator.clipboard.writeText(this.userInfos.clientId);
         this.cache.clientIdTooltip.classList.remove(this.classes.hide);
         setTimeout(() => {
             this.cache.clientIdTooltip.classList.add(this.classes.hide);
