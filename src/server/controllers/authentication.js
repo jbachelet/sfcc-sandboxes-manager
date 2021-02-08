@@ -61,12 +61,9 @@ exports.login_reentry = async (req, res) => {
         }
     );
 
-    if (!responseData) {
+    if (!responseData.success) {
         console.error('Failed to retrieve the access token.');
-        res.send({
-            error: true,
-            message: 'Failed to authenticate, please verify your configuration.'
-        });
+        res.send(responseData.data);
         return;
     }
 

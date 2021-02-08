@@ -18,7 +18,7 @@ const ACCOUNT_MANAGER_TOKEN_PATH = '/dw/oauth2/access_token';
  * @param {String} basicAuthPassword Password used for basic auth
  * @param {Object} grantPayload the grant payload to sent, by default { grant_type : 'client_credentials' } is used
  *
- * @return {Promise}
+ * @return {Boolean} True if the token has been retrieved and saved, false otherwise
  */
 module.exports.obtainToken = async (
     req,
@@ -53,15 +53,11 @@ module.exports.obtainToken = async (
         if (process.env.DEBUG) {
             console.log('Auth request', options);
         }
+
         const response = await axios(options);
 
         if (process.env.DEBUG) {
             console.log('Auth response', response.status, response.data);
-        }
-
-        if (!response.statusText === 'OK' || response.status !== 200) {
-            console.error(`Failed to obtain a token: ${response.data}`);
-            return undefined;
         }
 
         req.session.accessToken = response.data.access_token;
@@ -72,14 +68,21 @@ module.exports.obtainToken = async (
             req.session.userId = user.sub;
         }
 
-        return response.data;
+        return {
+            success: true
+        };
     } catch (err) {
         if (err.response) {
             // Request made and server responded
             console.log(
                 `Response status: ${err.response.status}`,
-                err.response.data
+                err?.response?.data
             );
+
+            return {
+                success: false,
+                data: err?.response?.data
+            };
         } else if (err.request) {
             // The request was made but no response was received
             console.log(err.request);
@@ -88,7 +91,9 @@ module.exports.obtainToken = async (
             console.log('Error', err.message);
         }
 
-        return undefined;
+        return {
+            success: false
+        };
     }
 };
 

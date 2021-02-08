@@ -214,7 +214,7 @@ module.exports.call = async (req, method, url, data, nbRetry = 0) => {
             { grant_type: 'refresh_token', refresh_token: refreshToken }
         );
         // If the authentication succeed, then re-try the API call that we were suppose to perform
-        if (authResponse) {
+        if (authResponse.success) {
             return module.exports.call(req, method, url, data, 1);
         }
 
