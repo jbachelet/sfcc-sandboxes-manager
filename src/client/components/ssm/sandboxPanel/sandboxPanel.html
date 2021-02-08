@@ -115,11 +115,13 @@
                                 <p>Deleted at: {deletedAt}</p>
                                 <p>Deleted by: {sandbox.deletedBy}</p>
                             </template>
-                            <p class="slds-text-title_caps slds-m-bottom_small">
-                                Versions:
-                            </p>
-                            <p>App: {sandbox.version.app}</p>
-                            <p>Web: {sandbox.versions.web}</p>
+                            <template if:true={hasVersionDetails}>
+                                <p class="slds-text-title_caps slds-m-bottom_small">
+                                    Versions:
+                                </p>
+                                <p>App: {sandbox.version.app}</p>
+                                <p>Web: {sandbox.versions.web}</p>
+                            </template>
                             <hr />
                             <p class="slds-text-title_caps slds-m-bottom_small">
                                 Links:

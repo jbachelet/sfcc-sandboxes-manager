@@ -314,6 +314,10 @@ export default class SandboxPanel extends LightningElement {
         return this.sandbox && this.sandbox.deletedAt && this.sandbox.deletedBy;
     }
 
+    get hasVersionDetails() {
+        return this.sandbox && this.sandbox.version;
+    }
+
     formatDate(date) {
         const d = date.getDate();
         const m = date.getMonth() + 1;
