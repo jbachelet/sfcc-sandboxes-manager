@@ -11,7 +11,11 @@
         <div class="slds-modal__container">
             <header class="slds-modal__header">
                 <button
-                    class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                    class="
+                        slds-button slds-button_icon
+                        slds-modal__close
+                        slds-button_icon-inverse
+                    "
                     title="Close"
                     onclick={handleClose}
                 >
@@ -73,6 +77,64 @@
                                             class="slds-input"
                                             data-js-ttl
                                         />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-form-element__row">
+                            <div class="slds-size_1-of-2">
+                                <div class="slds-form-element">
+                                    <label
+                                        class="slds-form-element__label"
+                                        for="ttl-input"
+                                        >Resource profile</label
+                                    >
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-select_container">
+                                            <select class="slds-select">
+                                                <template
+                                                    for:each={resourceProfiles}
+                                                    for:item="resourceProfileValue"
+                                                    for:index="resourceProfileValueIdx"
+                                                >
+                                                    <option
+                                                        value={resourceProfileValue}
+                                                        key={resourceProfileValue}
+                                                    >
+                                                        {resourceProfileValue}
+                                                    </option>
+                                                </template>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-form-element__row">
+                            <div class="slds-size_1-of-2">
+                                <div class="slds-form-element">
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-checkbox">
+                                            <input
+                                                type="checkbox"
+                                                id="auto-scheduled-input"
+                                                data-js-auto-scheduled
+                                            />
+                                            <label
+                                                class="slds-checkbox__label"
+                                                for="auto-scheduled-input"
+                                            >
+                                                <span
+                                                    class="slds-checkbox_faux"
+                                                ></span>
+                                                <span
+                                                    class="
+                                                        slds-form-element__label
+                                                    "
+                                                    >Auto scheduled</span
+                                                >
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

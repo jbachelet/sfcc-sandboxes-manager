@@ -1,12 +1,21 @@
 <template>
     <div
-        class="slds-panel slds-size_medium slds-panel_docked slds-panel_docked-right slds-size_large"
+        class="
+            slds-panel
+            slds-size_medium
+            slds-panel_docked slds-panel_docked-right
+            slds-size_large
+        "
         aria-hidden="true"
         data-js-panel
     >
         <div class="slds-panel__header">
             <h2
-                class="slds-panel__header-title slds-text-heading_small slds-truncate"
+                class="
+                    slds-panel__header-title
+                    slds-text-heading_small
+                    slds-truncate
+                "
                 title="Sandbox details"
             >
                 Sandbox details
@@ -17,7 +26,10 @@
                 </template>
             </h2>
             <button
-                class="slds-button slds-button_icon slds-button_icon-small slds-panel__close"
+                class="
+                    slds-button slds-button_icon slds-button_icon-small
+                    slds-panel__close
+                "
                 title="Sandbox details"
                 onclick={handleClose}
             >
@@ -106,6 +118,8 @@
                             <p>Realm: {sandbox.realm}</p>
                             <p>Sandbox ID: {sandbox.id}</p>
                             <p>Instance: {sandbox.instance}</p>
+                            <p>Auto scheduled: {sandbox.autoScheduled}</p>
+                            <p>Resource profile: {sandbox.resourceProfile}</p>
                             <p>Created at: {createdAt}</p>
                             <p>Created by: {sandbox.createdBy}</p>
                             <template if:true={hasEOL}>
@@ -116,7 +130,12 @@
                                 <p>Deleted by: {sandbox.deletedBy}</p>
                             </template>
                             <template if:true={hasVersionDetails}>
-                                <p class="slds-text-title_caps slds-m-bottom_small">
+                                <p
+                                    class="
+                                        slds-text-title_caps
+                                        slds-m-bottom_small
+                                    "
+                                >
                                     Versions:
                                 </p>
                                 <p>App: {sandbox.version.app}</p>
@@ -160,7 +179,10 @@
                             <template if:true={hasSandboxStorageLoaded}>
                                 <hr />
                                 <p
-                                    class="slds-text-title_caps slds-m-bottom_small"
+                                    class="
+                                        slds-text-title_caps
+                                        slds-m-bottom_small
+                                    "
                                 >
                                     Storage:
                                 </p>
@@ -208,10 +230,16 @@
                             <template if:false={isLoadingUsageData}>
                                 <template if:true={hasSandboxUsageLoaded}>
                                     <fieldset
-                                        class="slds-form-element slds-form-element_compound"
+                                        class="
+                                            slds-form-element
+                                            slds-form-element_compound
+                                        "
                                     >
                                         <legend
-                                            class="slds-form-element__legend slds-form-element__label"
+                                            class="
+                                                slds-form-element__legend
+                                                slds-form-element__label
+                                            "
                                         >
                                             History dates
                                         </legend>
@@ -219,20 +247,28 @@
                                             <div class="slds-form-element__row">
                                                 <div class="slds-size_1-of-2">
                                                     <div
-                                                        class="slds-form-element"
+                                                        class="
+                                                            slds-form-element
+                                                        "
                                                     >
                                                         <label
-                                                            class="slds-form-element__label"
+                                                            class="
+                                                                slds-form-element__label
+                                                            "
                                                             for="usage-from"
                                                             >From</label
                                                         >
                                                         <div
-                                                            class="slds-form-element__control"
+                                                            class="
+                                                                slds-form-element__control
+                                                            "
                                                         >
                                                             <input
                                                                 type="text"
                                                                 id="usage-from"
-                                                                class="slds-input"
+                                                                class="
+                                                                    slds-input
+                                                                "
                                                                 placeholder={today}
                                                                 value={usageFromValue}
                                                                 data-js-usage-from
@@ -242,20 +278,28 @@
                                                 </div>
                                                 <div class="slds-size_1-of-2">
                                                     <div
-                                                        class="slds-form-element"
+                                                        class="
+                                                            slds-form-element
+                                                        "
                                                     >
                                                         <label
-                                                            class="slds-form-element__label"
+                                                            class="
+                                                                slds-form-element__label
+                                                            "
                                                             for="usage-to"
                                                             >To</label
                                                         >
                                                         <div
-                                                            class="slds-form-element__control"
+                                                            class="
+                                                                slds-form-element__control
+                                                            "
                                                         >
                                                             <input
                                                                 type="text"
                                                                 id="usage-to"
-                                                                class="slds-input"
+                                                                class="
+                                                                    slds-input
+                                                                "
                                                                 placeholder={today}
                                                                 value={usageToValue}
                                                                 data-js-usage-to
@@ -267,11 +311,18 @@
                                         </div>
                                         <div class="slds-form-element">
                                             <div
-                                                class="slds-form-element__control"
+                                                class="
+                                                    slds-form-element__control
+                                                "
                                             >
                                                 <button
                                                     type="button"
-                                                    class="slds-button slds-button_neutral slds-button_stretch slds-button_outline-brand"
+                                                    class="
+                                                        slds-button
+                                                        slds-button_neutral
+                                                        slds-button_stretch
+                                                        slds-button_outline-brand
+                                                    "
                                                     onclick={handleRefreshUsageData}
                                                 >
                                                     Refresh usage data
@@ -281,7 +332,10 @@
                                     </fieldset>
                                     <hr />
                                     <p
-                                        class="slds-text-title_caps slds-m-bottom_small"
+                                        class="
+                                            slds-text-title_caps
+                                            slds-m-bottom_small
+                                        "
                                     >
                                         Usage summary:
                                     </p>
@@ -296,7 +350,10 @@
                                     </p>
                                     <hr />
                                     <p
-                                        class="slds-text-title_caps slds-m-bottom_small"
+                                        class="
+                                            slds-text-title_caps
+                                            slds-m-bottom_small
+                                        "
                                     >
                                         Usage details:
                                     </p>

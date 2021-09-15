@@ -6,6 +6,8 @@ export default class NewSandboxModal extends LightningElement {
         background: '[data-js-background]',
         realmIdInput: '[data-js-realm-id]',
         ttlInput: '[data-js-ttl]',
+        autoScheduledInput: '[data-js-auto-scheduled]',
+        resourceProfileInput: '[data-js-resource-profile]',
         ocapiSettingsInput: '[ data-js-ocapi-settings]',
         webdavSettingsInput: '[ data-js-webdav-settings]',
         inputCtnr: '.slds-form-element'
@@ -19,6 +21,9 @@ export default class NewSandboxModal extends LightningElement {
     cache = {};
     @api realmid = undefined;
     defaultTTL = 24;
+    defaultAutoScheduled = false;
+    defaultResourceProfile = 'medium';
+    resourceProfiles = ['medium', 'large', 'xlarge'];
     defaultOcapiSettings = JSON.stringify(
         [
             {
@@ -67,6 +72,12 @@ export default class NewSandboxModal extends LightningElement {
         this.cache.ttlInput = this.template.querySelector(
             this.selectors.ttlInput
         );
+        this.cache.autoScheduledInput = this.template.querySelector(
+            this.selectors.autoScheduledInput
+        );
+        this.cache.resourceProfileInput = this.template.querySelector(
+            this.selectors.resourceProfileInput
+        );
         this.cache.ocapiSettingsInput = this.template.querySelector(
             this.selectors.ocapiSettingsInput
         );
@@ -90,6 +101,12 @@ export default class NewSandboxModal extends LightningElement {
         this.cache.ttlInput
             .closest(this.selectors.inputCtnr)
             .classList.remove(this.classes.error);
+        this.cache.autoScheduledInput
+            .closest(this.selectors.inputCtnr)
+            .classList.remove(this.classes.error);
+        this.cache.resourceProfileInput
+            .closest(this.selectors.inputCtnr)
+            .classList.remove(this.classes.error);
         this.cache.ocapiSettingsInput
             .closest(this.selectors.inputCtnr)
             .classList.remove(this.classes.error);
@@ -99,6 +116,8 @@ export default class NewSandboxModal extends LightningElement {
 
         isError = !isError && this.validateInput(this.cache.realmIdInput);
         isError = !isError && this.validateInput(this.cache.ttlInput);
+        isError =
+            !isError && this.validateInput(this.cache.resourceProfileInput);
         isError =
             !isError && this.validateInput(this.cache.ocapiSettingsInput, true);
         isError =

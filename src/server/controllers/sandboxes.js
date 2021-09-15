@@ -59,6 +59,10 @@ exports.create = async (req, res) => {
     }
 
     const ttl = parseInt(req.body.ttl, 10) || config.defaults.ttl;
+    const autoScheduled =
+        req.body.autoScheduled || config.defaults.autoScheduled;
+    const resourceProfile =
+        req.body.resourceProfile || config.defaults.resourceProfile;
     let ocapiSettings = req.body.ocapiSettings || config.defaults.ocapiSettings;
     let webdavSettings =
         req.body.webdavSettings || config.defaults.webdavSettings;
@@ -86,7 +90,9 @@ exports.create = async (req, res) => {
         config.ocapi.SANDBOXES_ENDPOINTS.API_SANDBOXES,
         {
             realm: realmId,
-            ttl: ttl,
+            ttl,
+            autoScheduled,
+            resourceProfile,
             settings: {
                 ocapi: ocapiSettings,
                 webdav: webdavSettings
