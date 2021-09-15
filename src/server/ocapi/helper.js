@@ -60,6 +60,7 @@ module.exports.getClientSecret = (req) => {
 };
 
 module.exports.ensureValidResponse = (req, err, res) => {
+    console.log(res.body);
     // token invalid
     if (
         res &&
@@ -149,11 +150,24 @@ module.exports.sortRecords = (list, sortby) => {
  * @param {String} method HTTP request method to use on `url`
  * @param {String} url full URL to call
  */
-module.exports.call = async (req, method, url, data, nbRetry = 0) => {
+module.exports.call = async (
+    req,
+    method,
+    path,
+    data,
+    nbRetry = 0,
+    url = config.ocapi.SANDBOXES_ENDPOINTS.API_BASE
+) => {
     const accessToken = module.exports.getAccessToken(req);
-    const options = module.exports.getOptions(method, url, undefined, true, {
-        bearer: accessToken
-    });
+    const options = module.exports.getOptions(
+        method,
+        `${url}${path}`,
+        undefined,
+        true,
+        {
+            bearer: accessToken
+        }
+    );
     if (data) {
         options.data = data;
     }
@@ -182,6 +196,19 @@ module.exports.call = async (req, method, url, data, nbRetry = 0) => {
         // Abort directly
         // Only the 401 status means we might need to re-authenticate
         if (err?.response?.status !== 401) {
+            console.log(err?.response?.status);
+            console.log(url);
+            if (url === config.ocapi.SANDBOXES_ENDPOINTS.API_BASE) {
+                return module.exports.call(
+                    req,
+                    method,
+                    path,
+                    data,
+                    0,
+                    config.ocapi.SANDBOXES_ENDPOINTS.API_BASE_INTERNAL
+                );
+            }
+
             return {
                 status: err.response.status,
                 data: undefined
@@ -215,7 +242,7 @@ module.exports.call = async (req, method, url, data, nbRetry = 0) => {
         );
         // If the authentication succeed, then re-try the API call that we were suppose to perform
         if (authResponse.success) {
-            return module.exports.call(req, method, url, data, 1);
+            return module.exports.call(req, method, path, data, 1);
         }
 
         return {

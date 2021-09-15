@@ -4,12 +4,10 @@ const ocapi = require('../ocapi/helper');
 const config = require('../../config');
 
 exports.list = async (req, res) => {
-    const result = await ocapi.call(
+    let result = await ocapi.call(
         req,
         'get',
-        config.ocapi.SANDBOXES_ENDPOINTS.API_SANDBOXES +
-            '?include_deleted=' +
-            (req.query.includeDeleted || false)
+        '/sandboxes?include_deleted=' + (req.query.includeDeleted || false)
     );
     const sortBy = req.query.sortBy;
     const realmId = req.query.realmId;
@@ -34,6 +32,42 @@ exports.list = async (req, res) => {
             sandboxes = sandboxes.filter(
                 (sandbox) => sandbox.realm === realmId
             );
+        }
+
+        // Retry to the internal endpoint in case the realmId is an internal one
+        if (sandboxes.length === 0) {
+            result = await ocapi.call(
+                req,
+                'get',
+                '/sandboxes?include_deleted=' +
+                    (req.query.includeDeleted || false),
+                undefined,
+                0,
+                config.ocapi.SANDBOXES_ENDPOINTS.API_BASE_INTERNAL
+            );
+
+            // Return an error if the HTTP Status code is greater than 210
+            // Or if no data is sent
+            if (result.status > 210 || !result?.data?.data) {
+                res.json({
+                    error: true,
+                    status: result.status
+                });
+                return;
+            }
+
+            if (result?.data) {
+                sandboxes = result?.data?.data;
+                if (sortBy) {
+                    sandboxes = ocapi.sortRecords(sandboxes, sortBy);
+                }
+
+                if (realmId) {
+                    sandboxes = sandboxes.filter(
+                        (sandbox) => sandbox.realm === realmId
+                    );
+                }
+            }
         }
 
         res.json({
@@ -84,21 +118,16 @@ exports.create = async (req, res) => {
         return setting;
     });
 
-    const result = await ocapi.call(
-        req,
-        'post',
-        config.ocapi.SANDBOXES_ENDPOINTS.API_SANDBOXES,
-        {
-            realm: realmId,
-            ttl,
-            autoScheduled,
-            resourceProfile,
-            settings: {
-                ocapi: ocapiSettings,
-                webdav: webdavSettings
-            }
+    const result = await ocapi.call(req, 'post', '/sandboxes', {
+        realm: realmId,
+        ttl,
+        autoScheduled,
+        resourceProfile,
+        settings: {
+            ocapi: ocapiSettings,
+            webdav: webdavSettings
         }
-    );
+    });
 
     res.json(ocapi.prepareResponse(result));
 };
@@ -112,11 +141,7 @@ exports.get = async (req, res) => {
         return;
     }
 
-    const result = await ocapi.call(
-        req,
-        'get',
-        `${config.ocapi.SANDBOXES_ENDPOINTS.API_SANDBOXES}/${sandboxId}`
-    );
+    const result = await ocapi.call(req, 'get', `/sandboxes/${sandboxId}`);
 
     // Return an error if the HTTP Status code is greater than 210
     // Or if no data is sent
@@ -133,7 +158,7 @@ exports.get = async (req, res) => {
             const storageResult = await ocapi.call(
                 req,
                 'get',
-                `${config.ocapi.SANDBOXES_ENDPOINTS.API_SANDBOXES}/${sandboxId}/storage`
+                `/sandboxes/${sandboxId}/storage`
             );
 
             // Return an error if the HTTP Status code is greater than 210
@@ -173,11 +198,7 @@ exports.delete = async (req, res) => {
         return;
     }
 
-    const result = await ocapi.call(
-        req,
-        'delete',
-        `${config.ocapi.SANDBOXES_ENDPOINTS.API_SANDBOXES}/${sandboxId}`
-    );
+    const result = await ocapi.call(req, 'delete', `/sandboxes/${sandboxId}`);
 
     res.json(ocapi.prepareResponse(result));
 };
@@ -200,7 +221,7 @@ exports.usage = async (req, res) => {
     const result = await ocapi.call(
         req,
         'get',
-        `${config.ocapi.SANDBOXES_ENDPOINTS.API_SANDBOXES}/${sandboxId}/usage${queryString}`
+        `/sandboxes/${sandboxId}/usage${queryString}`
     );
 
     res.json(ocapi.prepareResponse(result));
@@ -217,7 +238,7 @@ exports.settings = async (req, res) => {
     const result = await ocapi.call(
         req,
         'get',
-        `${config.ocapi.SANDBOXES_ENDPOINTS.API_SANDBOXES}/${sandboxId}/settings`
+        `/sandboxes/${sandboxId}/settings`
     );
 
     res.json(ocapi.prepareResponse(result));
@@ -253,7 +274,7 @@ exports.getOperations = async (req, res) => {
     const result = await ocapi.call(
         req,
         'get',
-        `${config.ocapi.SANDBOXES_ENDPOINTS.API_SANDBOXES}/${sandboxId}/operations${queryString}`
+        `/sandboxes/${sandboxId}/operations${queryString}`
     );
 
     res.json(ocapi.prepareResponse(result));
@@ -271,7 +292,7 @@ exports.runOperation = async (req, res) => {
     const result = await ocapi.call(
         req,
         'post',
-        `${config.ocapi.SANDBOXES_ENDPOINTS.API_SANDBOXES}/${sandboxId}/operations`,
+        `/sandboxes/${sandboxId}/operations`,
         {
             operation
         }

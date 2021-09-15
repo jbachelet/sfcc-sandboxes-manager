@@ -1,14 +1,9 @@
 'use strict';
 
 const ocapi = require('../ocapi/helper');
-const config = require('../../config');
 
 exports.list = async (req, res) => {
-    const result = await ocapi.call(
-        req,
-        'get',
-        config.ocapi.SANDBOXES_ENDPOINTS.API_BASE + '/me'
-    );
+    const result = await ocapi.call(req, 'get', '/me');
 
     // Return an error if the HTTP Status code is greater than 210
     // Or if no data is sent
@@ -69,7 +64,7 @@ exports.get = async (req, res) => {
     const result = await ocapi.call(
         req,
         'get',
-        `${config.ocapi.SANDBOXES_ENDPOINTS.API_BASE}/realms/${realmId}${extension}`
+        `/realms/${realmId}${extension}`
     );
 
     res.json(ocapi.prepareResponse(result));
@@ -102,7 +97,7 @@ exports.update = async (req, res) => {
     const result = await ocapi.call(
         req,
         'patch',
-        `${config.ocapi.SANDBOXES_ENDPOINTS.API_BASE}/realms/${realmId}/configuration`,
+        `/realms/${realmId}/configuration`,
         data
     );
 

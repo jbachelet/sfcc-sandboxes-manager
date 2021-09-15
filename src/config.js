@@ -61,12 +61,15 @@ const GRANT = {
 // https://account.demandware.com/dwsso/oauth2/authorize?client_id=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&redirect_uri=https://sfcc-sandboxes-manager.herokuapp.com/auth/login_reentry&response_type=token
 const AUTHENTICATION_URL = `${ACCOUNT_MANAGER_URL}?client_id={0}&redirect_uri=${GRANT.redirect_uri}&response_type=${GRANT.response_type}`;
 
-const API_HOST = 'admin.us02.dx.commercecloud.salesforce.com';
+const API_HOST = 'admin.us01.dx.commercecloud.salesforce.com';
+const API_HOST_INTERNAL = 'admin.us02.dx.commercecloud.salesforce.com';
 const API_BASE = `${API_HOST}/api/${process.env.API_VERSION || 'v1'}`;
-const API_SANDBOXES = API_BASE + '/sandboxes';
+const API_BASE_INTERNAL = `${API_HOST_INTERNAL}/api/${
+    process.env.API_VERSION || 'v1'
+}`;
 const SANDBOXES_ENDPOINTS = {
     API_BASE,
-    API_SANDBOXES
+    API_BASE_INTERNAL
 };
 
 config.ocapi = {
